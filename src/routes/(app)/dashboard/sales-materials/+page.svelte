@@ -1,0 +1,15 @@
+<script>
+	import Class8Highlights from '$lib/assets/pdfs/Class 8 highlights 1.25.24.pdf';
+	import Class3_7Highlights from '$lib/assets/pdfs/Class 3-7 highlights 1.25.24.pdf';
+</script>
+
+<div class="flex flex-col p-8">
+	<div class="flex flex-col mb-4 gap-8 justify-between">
+		<h2 class="h2">Sales Materials</h2>
+		<h3 class="h3">Marketing Documents</h3>
+		<div class="flex flex-col gap-4">
+			<a class="link" href={Class8Highlights}> Aftermarket Warranty Highlights – Class 8 </a>
+			<a class="link" href={Class3_7Highlights}> Aftermarket Warranty Highlights – Class 3-7 </a>
+		</div>
+	</div>
+</div>

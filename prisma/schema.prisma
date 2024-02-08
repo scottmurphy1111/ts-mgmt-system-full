@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  relationMode      = "prisma"
+}
+
+model TsSalesRep {
+  id             String          @id @default(uuid())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  firstName      String
+  lastName       String
+  address        String
+  city           String
+  state          String
+  zip            String
+  country        String          @default("USA")
+  phone          String
+  email          String
+  company        String
+  notes          String?         @db.Text
+  producerGroups ProducerGroup[]
+
+  @@index([lastName])
+}
+
+model ProducerGroup {
+  id           String     @id @default(uuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  name         String
+  dba          String?
+  taxId        String?
+  website      String?
+  locations    Location[]
+  tsSalesRepId String
+  tsSalesRep   TsSalesRep @relation(fields: [tsSalesRepId], references: [id])
+
+  @@index([tsSalesRepId])
+}
+
+model Location {
+  id              String         @id @default(uuid())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  name            String
+  phone           String
+  email           String
+  website         String
+  address         String
+  city            String
+  state           String
+  zip             String
+  country         String         @default("USA")
+  programs        Program[]
+  producerGroupId String?
+  producerGroup   ProducerGroup? @relation(fields: [producerGroupId], references: [id])
+  // customers       Customer[]
+  notes           String
+  main            Boolean        @default(true)
+
+  @@index([producerGroupId])
+  @@index([name])
+}
+
+model Program {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  name       String
+  markup     Markup[]
+  locationId String
+  location   Location @relation(fields: [locationId], references: [id])
+
+  @@index([locationId])
+}
+
+model Markup {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  termValue   String
+  markupValue String
+  programId   String
+  program     Program  @relation(fields: [programId], references: [id])
+
+  @@index([programId])
+}
