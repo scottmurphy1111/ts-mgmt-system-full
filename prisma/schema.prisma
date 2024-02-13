@@ -33,16 +33,30 @@ model TsSalesRep {
 }
 
 model ProducerGroup {
-  id           String     @id @default(uuid())
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  name         String
-  dba          String?
-  taxId        String?
-  website      String?
-  locations    Location[]
-  tsSalesRepId String
-  tsSalesRep   TsSalesRep @relation(fields: [tsSalesRepId], references: [id])
+  id                  String     @id @default(uuid())
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  name                String
+  dba                 String?
+  taxId               String?
+  website             String?
+  primaryAddress      String
+  primaryCity         String
+  primaryState        String
+  primaryZip          String
+  primaryCountry      String     @default("USA")
+  primaryContactName  String
+  primaryContactPhone String
+  primaryContactEmail String
+  primaryContactTitle String?
+  mailingAddress      String?
+  mailingCity         String?
+  mailingState        String?
+  mailingZip          String?
+  mailingCountry      String?    @default("USA")
+  locations           Location[]
+  tsSalesRepId        String
+  tsSalesRep          TsSalesRep @relation(fields: [tsSalesRepId], references: [id])
 
   @@index([tsSalesRepId])
 }
@@ -64,11 +78,28 @@ model Location {
   producerGroupId String?
   producerGroup   ProducerGroup? @relation(fields: [producerGroupId], references: [id])
   // customers       Customer[]
+  portalUsers     PortalUser[]
   notes           String
   main            Boolean        @default(true)
 
   @@index([producerGroupId])
   @@index([name])
+}
+
+model PortalUser {
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  email      String    @unique
+  password   String
+  firstName  String
+  lastName   String
+  phone      String
+  role       String
+  locationId String
+  location   Location? @relation(fields: [locationId], references: [id])
+
+  @@index([locationId])
 }
 
 model Program {

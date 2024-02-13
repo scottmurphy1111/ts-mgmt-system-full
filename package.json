@@ -4,19 +4,21 @@
   "private": true,
   "scripts": {
     "dev": "vite dev",
-		"build": "prisma generate && vite build",
-		"preview": "vite preview",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"test": "vitest",
-		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+    "build": "prisma generate && vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "test": "vitest",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write ."
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.509.0",
     "@playwright/test": "^1.28.1",
     "@skeletonlabs/skeleton": "2.7.0",
     "@skeletonlabs/tw-plugin": "0.3.1",
     "@sveltejs/adapter-auto": "^3.0.0",
+    "@sveltejs/adapter-netlify": "^4.1.0",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
     "@tailwindcss/forms": "0.5.7",

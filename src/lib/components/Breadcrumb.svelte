@@ -34,7 +34,5 @@
 				{item.name}
 			{/if}
 		{/each}
-		<!-- <a class="link" href="/dashboard">Dashboard</a>
-		&gt; Sales Materials -->
 	</div>
 </div>

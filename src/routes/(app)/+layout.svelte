@@ -28,7 +28,7 @@
 			<div class="bg-surface-500 opacity-50 w-full h-full absolute top-0 left-0"></div>
 		</div>
 	</ClerkLoading>
-	<ClerkLoaded>
+	<ClerkLoaded let:clerk>
 		<div class={`w-full h-full  bg-[length:6px_6px] bg-repeat`} style={patternStyle}>
 			<slot />
 		</div>

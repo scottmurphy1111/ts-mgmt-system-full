@@ -21,7 +21,7 @@
 			<div class="w-full md:w-1/2 flex gap-4 flex-wrap">
 				<a
 					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full md:max-w-screen-md h-min"
-					href="/dashboard/enrollment"
+					href="/dashboard/producer-enrollment"
 					><header>
 						<h3 class="flex gap-2 h3 items-center">Producer Enrollment</h3>
 					</header>
@@ -30,37 +30,12 @@
 						<button class="btn bg-gradient-to-br variant-gradient-primary-secondary">Launch</button>
 					</footer></a
 				>
+
 				<a
 					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full md:max-w-screen-md h-min"
-					href="https://rates.trucksuite.com/"
-					target="_blank"
-					rel="noopener"
+					href="/dashboard/marketing-tools"
 					><header>
-						<h3 class="flex gap-2 h3 items-center">Ratesheet Tool</h3>
-					</header>
-					<section></section>
-					<footer>
-						<button class="btn bg-gradient-to-br variant-gradient-primary-secondary">Launch</button>
-					</footer></a
-				>
-				<a
-					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full md:max-w-screen-md h-min"
-					href="https://calculator.trucksuite.com/"
-					target="_blank"
-					rel="noopener"
-					><header>
-						<h3 class="flex gap-2 h3 items-center">Weekly Payments Calculator</h3>
-					</header>
-					<section></section>
-					<footer>
-						<button class="btn bg-gradient-to-br variant-gradient-primary-secondary">Launch</button>
-					</footer></a
-				>
-				<a
-					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full md:max-w-screen-md h-min"
-					href="/dashboard/sales-materials"
-					><header>
-						<h3 class="flex gap-2 h3 items-center">Sales Materials</h3>
+						<h3 class="flex gap-2 h3 items-center">Marketing &amp; Tools</h3>
 					</header>
 					<section></section>
 					<footer>
