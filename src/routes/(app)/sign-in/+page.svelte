@@ -5,7 +5,7 @@
 </script>
 
 <div class="flex flex-col gap-4 items-center justify-center h-full">
-	<h2 class="h2">Welcome to TS Management System SIGN IN</h2>
+	<h2 class="h2">Welcome to TS Management System</h2>
 	<SignIn redirectUrl="/dashboard" />
 	<SignedIn let:user>
 		<div class="flex fixed w-screen h-screen top-0 justify-center items-center z-20">

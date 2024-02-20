@@ -2,12 +2,14 @@
 	import '../app.postcss';
 	import { Toast, Modal, initializeStores, type ModalComponent } from '@skeletonlabs/skeleton';
 	import ModalImage from '$lib/components/ModalImage.svelte';
+	import ModalAuto from '$lib/components/ModalAuto.svelte';
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import SpinnerIcon from '$lib/assets/icons/spinner.svelte';
 
 	const modalRegistry: Record<string, ModalComponent> = {
-		modalImage: { ref: ModalImage }
+		modalImage: { ref: ModalImage },
+		modalAuto: { ref: ModalAuto }
 	};
 
 	const pendingStore = writable<boolean>(false);

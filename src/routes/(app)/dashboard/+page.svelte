@@ -11,7 +11,7 @@
 	$: ({ producers } = data);
 </script>
 
-{#if data.userData}
+{#if data.userData && data.userData.publicMetadata.ts_role}
 	<div class="flex flex-col p-8">
 		<div class="flex mb-4 gap-8 justify-between items-center">
 			<h2 class="h2 w-1/2">Dashboard</h2>
@@ -117,6 +117,14 @@
 					{/each}
 				</div>
 			</div>
+		</div>
+	</div>
+{:else if data.userData && !data.userData.publicMetadata.ts_role}
+	<div class="flex flex-col">
+		<div class="flex gap-4 justify-center items-center h-screen">
+			<h3 class="h3">
+				You do not have access yet, please email <span class="link">scott@trucksuite.com</span>
+			</h3>
 		</div>
 	</div>
 {:else}

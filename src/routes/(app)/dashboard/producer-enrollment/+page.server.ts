@@ -5,11 +5,17 @@ import { type Actions } from '@sveltejs/kit';
 import { BUCKET } from '$lib/helpers/helpers';
 import { PutObjectCommand, type ObjectCannedACL } from '@aws-sdk/client-s3';
 import { s3Client } from '$lib/server/s3client';
+import type { Ratesheet } from '$lib/types/types';
 
 export const load: LayoutServerLoad = async () => {
 	const reps = await clerkClient.organizations.getOrganizationMembershipList({
 		organizationId: 'org_2c6L4NwAT5uaKfVM9A06p3OxwQw'
 	});
+
+	const response = await fetch('https://ts-rates.netlify.app/api/ratesheets');
+
+	// MOVE THIS TO LAYOUT LOAD FUNCTION ❗️❗️❗️❗️
+	const ratesheets = (await response.json()) as Ratesheet[];
 
 	// console.log('reps', reps);
 
@@ -18,7 +24,8 @@ export const load: LayoutServerLoad = async () => {
 	// const userData = session ? await clerkClient.users.getUser(session.userId) : null;
 
 	return {
-		reps: JSON.parse(JSON.stringify(reps)) as OrganizationMembership[]
+		reps: JSON.parse(JSON.stringify(reps)) as OrganizationMembership[],
+		ratesheets
 	};
 };
 
