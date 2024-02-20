@@ -46,7 +46,7 @@
 		modalStore.trigger(instructionsModal);
 	}
 	onMount(() => {
-		// modalStore.trigger(modal); ❗️❗️❗️❗️❗️❗️❗️❗️ ADD back in when ready
+		modalStore.trigger(modal); //❗️❗️❗️❗️❗️❗️❗️❗️ ADD back in when ready
 	});
 
 	$: locations = [] as ProducerLocationWithIncludes[];
