@@ -23,16 +23,18 @@
 </script>
 
 <div class="relative" data-sveltekit-replacestate>
-	<div class="pt-2 px-4 absolute top-0 right-4 text-xs">
-		{#each updatedUrl as item, index}
-			{#if index < updatedUrl.length - 1}
-				<a class="link" href={`${item.path}`}>{item.name}</a>
-				{#if index !== updatedUrl.length - 1}
-					<span class="mr-1">&gt;</span>
+	{#if updatedUrl.length}
+		<div class="flex justify-start py-2 px-4 text-xs w-full border-b border-surface-100-800-token">
+			{#each updatedUrl as item, index}
+				{#if index < updatedUrl.length - 1}
+					<a class="link" href={`${item.path}`}>{item.name}</a>
+					{#if index !== updatedUrl.length - 1}
+						<span class="mx-1">&gt;</span>
+					{/if}
+				{:else}
+					{item.name}
 				{/if}
-			{:else}
-				{item.name}
-			{/if}
-		{/each}
-	</div>
+			{/each}
+		</div>
+	{/if}
 </div>

@@ -8,31 +8,30 @@
 	import DeleteOutput from '$lib/components/DeleteOutput.svelte';
 
 	export let data: PageData;
-	$: ({ producers } = data);
+	// $: ({ producers } = data);
 </script>
 
 {#if data.userData && data.userData.publicMetadata.ts_role}
 	<div class="flex flex-col p-8">
 		<div class="flex mb-4 gap-8 justify-between items-center">
 			<h2 class="h2 w-1/2">Dashboard</h2>
-			<p class="italic text-sm w-1/2">My Producers</p>
+			<!-- f -->
 		</div>
 		<div class="w-full flex flex-col gap-8 md:flex-row items-start">
-			<div class="w-full md:w-1/2 flex gap-4 flex-wrap">
+			<div class="w-full flex gap-4 flex-wrap">
 				<a
-					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full md:max-w-screen-md h-min"
-					href="/dashboard/producer-enrollment"
+					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full h-min"
+					href="/dashboard/producers"
 					><header>
-						<h3 class="flex gap-2 h3 items-center">Producer Enrollment</h3>
+						<h3 class="flex gap-2 h3 items-center">Producers</h3>
 					</header>
 					<section></section>
 					<footer>
 						<button class="btn bg-gradient-to-br variant-gradient-primary-secondary">Launch</button>
 					</footer></a
 				>
-
 				<a
-					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full md:max-w-screen-md h-min"
+					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full h-min"
 					href="/dashboard/marketing-tools"
 					><header>
 						<h3 class="flex gap-2 h3 items-center">Marketing &amp; Tools</h3>
@@ -43,7 +42,7 @@
 					</footer></a
 				>
 				<a
-					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full md:max-w-screen-md h-min"
+					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full h-min"
 					href="https://trucksuite.tecassured.com/"
 					target="_blank"
 					rel="noopener"
@@ -96,26 +95,6 @@
 						</footer></a
 					>
 				{/if} -->
-			</div>
-			<div class="flex flex-col w-full md:w-1/2 gap-4">
-				<div class="grid grid-cols-3 gap-4 place-content-center">
-					<span class="font-semibold">Link</span>
-					<span class="font-semibold">Created</span>
-					<span></span>
-					{#each producers.sort((a, b) => Number(b.createdAt) - Number(a.createdAt)) as producer}
-						{producer.name}
-						<!-- <a class="flex text-primary-500 items-center" href={`/output?id=${output.id}`}>
-							{output.label ? output.label : 'No Label'}
-						</a>
-						<div class="flex gap-2 justify-between items-center">
-							<span>{format(output.createdAt, 'MM/dd/yyyy - hh:mm:ss a')}</span>
-						</div>
-						<div class="flex gap-4 items-center">
-							<CopyButton copyData={`${appHost}/output?id=${output.id}`} />
-							<DeleteOutput outputId={output.id} />
-						</div> -->
-					{/each}
-				</div>
 			</div>
 		</div>
 	</div>

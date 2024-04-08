@@ -12,122 +12,130 @@ datasource db {
   relationMode      = "prisma"
 }
 
-model TsSalesRep {
-  id             String          @id @default(uuid())
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  firstName      String
-  lastName       String
-  address        String
-  city           String
-  state          String
-  zip            String
-  country        String          @default("USA")
-  phone          String
-  email          String
-  company        String
-  notes          String?         @db.Text
-  producerGroups ProducerGroup[]
+// REMOVING FOR NOW
+// model TsSalesRep {
+//   id             String          @id @default(uuid())
+//   createdAt      DateTime        @default(now())
+//   updatedAt      DateTime        @updatedAt
+//   firstName      String
+//   lastName       String
+//   address        String
+//   city           String
+//   state          String
+//   zip            String
+//   country        String          @default("USA")
+//   phone          String
+//   email          String
+//   company        String
+//   notes          String?         @db.Text
+//   producers Producer[]
 
-  @@index([lastName])
-}
+//   @@index([lastName])
+// }
 
-model ProducerGroup {
-  id                  String             @id @default(uuid())
-  createdAt           DateTime           @default(now())
-  updatedAt           DateTime           @updatedAt
+model Producer {
+  id                  String         @id @default(uuid())
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
   name                String
   dba                 String?
   taxId               String?
   website             String?
+  type                String
   primaryContactName  String
   primaryContactPhone String
   primaryContactEmail String
   primaryContactTitle String?
-  producerLocations   ProducerLocation[]
   tsSalesRepId        String
-  tsSalesRep          TsSalesRep         @relation(fields: [tsSalesRepId], references: [id])
+  locations           TsLocation[]
+  status              ProducerStatus @default(PENDING)
+}
 
+enum ProducerStatus {
+  PENDING
+  ENROLLED
+  ACTIVE
+  INACTIVE
+}
+
+model TsLocation {
+  id               String            @id @default(uuid())
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  name             String
+  phone            String
+  email            String
+  website          String?
+  address          String
+  city             String
+  state            String
+  zip              String
+  country          String            @default("USA")
+  mailingAddress   String?
+  mailingCity      String?
+  mailingState     String?
+  mailingZip       String?
+  mailingCountry   String?           @default("USA")
+  tsSalesRepId     String
+  producerId       String?
+  producer         Producer?         @relation(fields: [producerId], references: [id], onDelete: SetNull)
+  // customers       Customer[]
+  locationPrograms LocationProgram[]
+  locationContacts LocationContact[]
+  locationNotes    LocationNote[]
+  main             Boolean           @default(false)
+
+  @@index([producerId])
+  @@index([name])
   @@index([tsSalesRepId])
 }
 
-model ProducerLocation {
-  id              String         @id @default(uuid())
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+model LocationProgram {
+  id              String           @id @default(uuid())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   name            String
-  phone           String
-  email           String
-  website         String?
-  address         String
-  city            String
-  state           String
-  zip             String
-  country         String         @default("USA")
-  mailingAddress  String?
-  mailingCity     String?
-  mailingState    String?
-  mailingZip      String?
-  mailingCountry  String?        @default("USA")
-  programs        Program[]
-  producerGroupId String?
-  producerGroup   ProducerGroup? @relation(fields: [producerGroupId], references: [id])
-  // customers       Customer[]
-  portalUsers     PortalUser[]
-  notes           Note[]
-  main            Boolean        @default(true)
+  locationMarkups LocationMarkup[]
+  locationId      String
+  location        TsLocation       @relation(fields: [locationId], references: [id], onDelete: Cascade)
 
-  @@index([producerGroupId])
-  @@index([name])
+  @@index([locationId])
 }
 
-model Note {
-  id                 String           @id @default(uuid())
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  note               String
-  producerLocationId String
-  producerLocation   ProducerLocation @relation(fields: [producerLocationId], references: [id])
+model LocationMarkup {
+  id                String          @id @default(uuid())
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  termValue         String
+  markupValue       String
+  locationProgramId String
+  locationProgram   LocationProgram @relation(fields: [locationProgramId], references: [id], onDelete: Cascade)
 
-  @@index([producerLocationId])
+  @@index([locationProgramId])
 }
 
-model PortalUser {
-  id                 String            @id @default(uuid())
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
-  email              String            @unique
-  password           String
-  firstName          String
-  lastName           String
-  phone              String
-  role               String
-  producerLocationId String
-  producerLocation   ProducerLocation? @relation(fields: [producerLocationId], references: [id])
+model LocationNote {
+  id         String     @id @default(uuid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  note       String
+  locationId String
+  location   TsLocation @relation(fields: [locationId], references: [id], onDelete: Cascade)
 
-  @@index([producerLocationId])
+  @@index([locationId])
 }
 
-model Program {
-  id                 String           @id @default(uuid())
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  name               String
-  markup             Markup[]
-  producerLocationId String
-  producerLocation   ProducerLocation @relation(fields: [producerLocationId], references: [id])
+model LocationContact {
+  id         String      @id @default(uuid())
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  email      String      @unique
+  firstName  String
+  lastName   String
+  phone      String?
+  role       String?
+  locationId String
+  location   TsLocation? @relation(fields: [locationId], references: [id], onDelete: Cascade)
 
-  @@index([producerLocationId])
-}
-
-model Markup {
-  id          String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  termValue   String
-  markupValue String
-  programId   String
-  program     Program  @relation(fields: [programId], references: [id])
-
-  @@index([programId])
+  @@index([locationId])
 }

@@ -1,6 +1,7 @@
 <script>
 	import Class8Highlights from '$lib/assets/pdfs/Class 8 highlights 1.25.24.pdf';
 	import Class3_7Highlights from '$lib/assets/pdfs/Class 3-7 highlights 1.25.24.pdf';
+	import TSRackCard from '$lib/assets/pdfs/TS Rack Card Highlights CLASS8.pdf';
 </script>
 
 <div class="flex flex-col p-8">
@@ -13,6 +14,9 @@
 			</a>
 			<a class="link" href={Class3_7Highlights} target="_blank" rel="noopener">
 				Aftermarket Warranty Highlights – Class 3-7
+			</a>
+			<a class="link" href={TSRackCard} target="_blank" rel="noopener">
+				TS Rack Card Highlights - CLASS 8
 			</a>
 		</div>
 		<h3 class="h3">Sales Tools</h3>
