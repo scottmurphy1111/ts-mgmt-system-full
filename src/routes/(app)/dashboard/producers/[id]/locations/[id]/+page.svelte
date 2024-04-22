@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
 	import Contacts from './Contacts.svelte';
 	import Notes from './Notes.svelte';
 	import Programs from './Programs.svelte';
@@ -61,15 +62,15 @@
 			</div>
 		</div>
 		<h4 class="h4 font-semibold">Contacts</h4>
-		<div class="flex flex-col gap-8 w-full pb-8 border-b border-surface-200">
+		<div class="flex flex-col gap-4 w-full pb-8 border-b border-surface-200">
 			<Contacts {location} error={form?.saveContactError} />
 		</div>
 		<h4 class="h4 font-semibold">Programs</h4>
-		<div class="flex flex-col gap-8 w-full pb-8 border-b border-surface-200">
+		<div class="flex flex-col gap-4 w-full pb-8 border-b border-surface-200">
 			<Programs {location} {ratesheets} error={form?.saveProgramsError} />
 		</div>
 		<h4 class="h4 font-semibold">Notes</h4>
-		<div class="flex flex-col gap-8 w-full pb-8 border-b border-surface-200">
+		<div class="flex flex-col gap-4 w-full pb-8">
 			<Notes {location} error={form?.saveNoteError} />
 		</div>
 	{/if}

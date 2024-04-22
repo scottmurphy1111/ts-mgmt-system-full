@@ -13,14 +13,15 @@
 	const modalStore = getModalStore();
 
 	const sendToAgreements = () => {
-		console.log('sendToAgreements');
+		// console.log('sendToAgreements');
 		goto('/dashboard/producers/send-agreement');
 		parent.onClose();
 	};
 
 	const sendToNew = () => {
-		console.log('sendToNew');
+		// console.log('sendToNew');
 		goto('/dashboard/producers/new');
+
 		parent.onClose();
 	};
 
@@ -35,18 +36,18 @@
 			<svelte:component this={CloseIcon} />
 		</button>
 		<div class="flex flex-col space-y-8 container">
-			<h3 class="h3 mb-4">{$modalStore[0].title}</h3>
+			<h3 class="h3 font-semibold mb-4">{$modalStore[0].title}</h3>
 			{@html $modalStore[0].body}
 			<div class="flex w-full gap-4 justify-start">
-				<button
-					type="button"
+				<a
+					href="/dashboard/producers/send-agreement"
 					class="btn bg-gradient-to-br variant-gradient-primary-secondary text-wrap"
-					on:click={sendToAgreements}>Send Producer Agreement for e-signature</button
+					on:click={parent.onClose}>Send Producer Agreement for e-signature</a
 				>
-				<button
-					type="button"
+				<a
+					href="/dashboard/producers/new"
 					class="btn bg-gradient-to-br from-success-700 to-success-800 text-wrap text-white"
-					on:click={sendToNew}>Proceed with Create a New Producer</button
+					on:click={parent.onClose}>Proceed with Create a New Producer</a
 				>
 			</div>
 		</div>

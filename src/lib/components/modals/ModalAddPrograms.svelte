@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, type SvelteComponent } from 'svelte';
+	import { getContext, onMount, type SvelteComponent } from 'svelte';
 
 	// Stores
 	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
@@ -27,12 +27,13 @@
 	};
 
 	$: allRatesheets = $modalStore[0]?.meta.ratesheets as Ratesheet[];
+	// $: assignedPrograms = $modalStore[0]?.meta.assignedPrograms as LocationProgramWithIncludes[];
+
 	$: assignedPrograms = $modalStore[0]?.meta.assignedPrograms as LocationProgramWithIncludes[];
 
-	$: console.log('assignedPrograms', assignedPrograms);
 	$: sortedRatesheets = allRatesheets
 		?.filter((ratesheet) => {
-			return !assignedPrograms.some((program) => program.name === ratesheet.title);
+			return !assignedPrograms?.some((program) => program.name === ratesheet.title);
 		})
 		.sort((a: { name: string }, b: { name: string }) => {
 			if (a.name < b.name) {
@@ -85,7 +86,7 @@
 			<svelte:component this={CloseIcon} />
 		</button>
 		<div class="flex flex-col space-y-8 container">
-			<h3 class="h3 mb-4">Add Programs</h3>
+			<h3 class="h3 font-semibold mb-4">Add Programs</h3>
 			<!-- {@html $modalStore[0].body} -->
 			<form
 				method="post"
@@ -94,10 +95,10 @@
 					return async ({ result, update }) => {
 						await update();
 						if (result?.status === 200) {
-							toastStore.trigger({ message: '👍 Contact saved successfully' });
+							toastStore.trigger({ message: '👍 Programs saved successfully' });
 							parent.onClose();
 						} else {
-							toastStore.trigger({ message: '❗️ Contact save failed' });
+							toastStore.trigger({ message: '❗️ Programs save failed' });
 							parent.onClose();
 						}
 						// parent.onClose();
@@ -168,7 +169,7 @@
 				</div> -->
 				<!-- <input hidden type="text" name="producerId" value={$modalStore[0]?.meta.producerId} /> -->
 				<div class="flex flex-col gap-4 mb-8 pb-8 border-b border-surface-200">
-					{#if assignedPrograms.length > 0}
+					{#if assignedPrograms?.length > 0}
 						{#each assignedPrograms as program}
 							<ProgramRow {program} />
 						{/each}
@@ -179,7 +180,6 @@
 						{/each}
 					{/if}
 				</div>
-				<input hidden type="text" name="locationId" value={$modalStore[0]?.meta.locationId} />
 				<!-- <div class="flex flex-col gap-4 mb-8 pb-8">
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="firstName">First Name</label>
@@ -245,7 +245,7 @@
 						</span>
 					</div>
 				</div> -->
-				<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
+				<div class="grid grid-cols-2 gap-4">
 					<span class="flex flex-col items-baseline gap-1">
 						<!-- {#if $creatingLocationStore} -->
 						<button

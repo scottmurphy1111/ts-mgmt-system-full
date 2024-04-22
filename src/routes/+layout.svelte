@@ -12,6 +12,7 @@
 	import ModalAddLocation from '$lib/components/modals/ModalAddLocation.svelte';
 	import ModalAddContact from '$lib/components/modals/ModalAddContact.svelte';
 	import ModalAddPrograms from '$lib/components/modals/ModalAddPrograms.svelte';
+	import ModalCompleteEnrollment from '$lib/components/modals/ModalCompleteEnrollment.svelte';
 
 	const modalRegistry: Record<string, ModalComponent> = {
 		modalImage: { ref: ModalImage },
@@ -19,6 +20,7 @@
 		modalAddLocation: { ref: ModalAddLocation },
 		modalAddContact: { ref: ModalAddContact },
 		modalAddPrograms: { ref: ModalAddPrograms },
+		modalCompleteEnrollment: { ref: ModalCompleteEnrollment },
 
 		//remove??
 		assignProgramsModal: { ref: AssignProgramsModal },

@@ -31,6 +31,7 @@
 			{#each program.locationMarkups.sort( (a, b) => (a.termValue > b.termValue ? 1 : a.termValue < b.termValue ? -1 : 0) ) as markup}
 				<span class="flex flex-col items-baseline gap-1 markup">
 					<!-- <label for="termValue">Term</label> -->
+					<input hidden type="text" name="markupId" value={markup.id} />
 					<input class="input" type="text" name="termValue" value={markup.termValue} readonly />
 					<input class="input pl-8" type="text" name="markupValue" value={markup.markupValue} />
 				</span>

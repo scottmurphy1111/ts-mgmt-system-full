@@ -11,6 +11,11 @@ export const actions: Actions = {
 		const taxId = formData.get('taxId') as string;
 		const website = formData.get('website') as string;
 		const type = formData.get('type') as string;
+		const address = formData.get('address') as string;
+		const city = formData.get('city') as string;
+		const state = formData.get('state') as string;
+		const zip = formData.get('zip') as string;
+		const country = formData.get('country') as string;
 		const primaryContactName = formData.get('primaryContactName') as string;
 		const primaryContactPhone = formData.get('primaryContactPhone') as string;
 		const primaryContactEmail = formData.get('primaryContactEmail') as string;
@@ -48,6 +53,11 @@ export const actions: Actions = {
 					taxId,
 					website,
 					type,
+					address,
+					city,
+					state,
+					zip,
+					country,
 					primaryContactName,
 					primaryContactPhone,
 					primaryContactEmail,
@@ -59,6 +69,11 @@ export const actions: Actions = {
 					taxId,
 					website,
 					type,
+					address,
+					city,
+					state,
+					zip,
+					country,
 					primaryContactName,
 					primaryContactPhone,
 					primaryContactEmail,

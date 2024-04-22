@@ -13,7 +13,7 @@
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import DeleteOutput from '$lib/components/DeleteOutput.svelte';
 	import { appHost } from '$lib/helpers/helpers';
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import Search from '$lib/components/datatables/Search.svelte';
 	import RowsPerPage from '$lib/components/datatables/RowsPerPage.svelte';
 	import RowCount from '$lib/components/datatables/RowCount.svelte';
@@ -22,10 +22,13 @@
 	import Datatable from '$lib/components/datatables/Datatable.svelte';
 	import { DataHandler, type State } from '@vincjo/datatables/remote';
 	import StatusBadge from '$lib/components/core/StatusBadge.svelte';
+	import { enhance } from '$app/forms';
 
 	// import ThFilter from '$lib/components/datatables/ThFilter.svelte';
 
 	export let data;
+
+	let activateForm: HTMLFormElement;
 	$: ({ count, producers, userData, reps, ratesheets } = data);
 
 	$: console.log('🥶 producers', producers);
@@ -101,13 +104,45 @@
 		handler.invalidate();
 	}
 
-	handler.onChange((state: State) => reload(state, salesRepId));
+	handler.onChange((state: State) => reload(state, 'producers', { salesRepId: salesRepId }));
 
 	$: if (userData?.publicMetadata?.ts_role !== 'ts_rep') {
 		handler.invalidate();
 	}
-	// handler.invalidate();
-	// $: console.log('rows', $rows);
+
+	const triggerCompleteEnrollmentModal = (producerId: string) => {
+		const modalCompleteEnrollment: ModalSettings = {
+			type: 'component',
+			component: 'modalCompleteEnrollment',
+			meta: {
+				producerId
+			},
+			title: 'Complete Enrollment',
+			body: `Are you sure you want to complete the enrollment process for this producer? After submitting, the Producer's information can only be edited by an admin at TruckSuite HQ.`,
+			backdropClasses: 'opacity-95',
+			modalClasses: 'p-8',
+			response: (response) => {
+				console.log('response', response);
+				if (!response) {
+					handler.invalidate();
+					invalidate('data:producer');
+				}
+			}
+		};
+		modalStore.trigger(modalCompleteEnrollment);
+	};
+
+	const modalActivateProducer: ModalSettings = {
+		type: 'confirm',
+		title: 'Activate Producer',
+		body: 'Are you sure you want to activate this producer?',
+		response: (response) => {
+			console.log('response', response);
+			if (response) {
+				activateForm.requestSubmit();
+			}
+		}
+	};
 </script>
 
 {#if userData}
@@ -187,23 +222,45 @@
 									{#each $rows as producer}
 										<tr>
 											<td>
-												<span class="flex items-center gap-2"
-													>{producer.name}<StatusBadge status={producer.status} /></span
-												>
+												<a href={`/dashboard/producers/${producer.id}`}>
+													<span class="flex items-center gap-2">
+														{producer.name}<StatusBadge status={producer.status} />
+													</span>
+												</a>
 											</td>
 											<td>
-												<span class="flex items-center">{producer.primaryContactName}</span>
+												<a href={`/dashboard/producers/${producer.id}`}>
+													<span class="flex items-center">{producer.primaryContactName}</span>
+												</a>
 											</td>
 											<td class="flex gap-4 items-center">
 												<a
 													class="flex text-primary-500 items-center"
 													href={`/dashboard/producers/${producer.id}`}>View</a
 												>
-												<a
-													class="flex text-primary-500 items-center"
-													href={`/dashboard/producer-enrollment/${producer.id}`}
-													>Complete Enrollment</a
-												>
+												{#if producer.status === 'STARTED'}
+													<button
+														type="button"
+														class="flex text-primary-500 items-center"
+														on:click={() => triggerCompleteEnrollmentModal(producer.id)}
+														>Complete Enrollment</button
+													>{/if}
+												{#if producer.status === 'PENDING' && userData?.publicMetadata?.ts_role === 'admin'}
+													<form
+														method="post"
+														action="?/activateProducer"
+														use:enhance
+														bind:this={activateForm}
+													>
+														<input type="hidden" name="producerId" value={producer.id} />
+														<button
+															type="button"
+															class="flex text-primary-500 items-center"
+															on:click={() => modalStore.trigger(modalActivateProducer)}
+															>Activate</button
+														>
+													</form>
+												{/if}
 											</td></tr
 										>
 									{/each}

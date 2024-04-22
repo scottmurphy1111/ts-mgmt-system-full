@@ -12,9 +12,9 @@ export const GET: RequestHandler = async ({ url }) => {
 	const page = url.searchParams.get('_page');
 	const orderBy = url.searchParams.get('_sort');
 	const order = url.searchParams.get('_order');
-	const salesRepId = url.searchParams.get('salesRepId');
+	const locationId = url.searchParams.get('locationId');
 
-	console.log('salesRepId', salesRepId);
+	console.log('locationId', locationId);
 
 	if (id) {
 		const contact = await client.locationContact.findUnique({
@@ -27,7 +27,7 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	const contacts = await client.locationContact.findMany({
 		where: {
-			...(salesRepId ? { tsSalesRepId: salesRepId } : {}),
+			...(locationId ? { locationId: locationId } : {}),
 			OR: [
 				{
 					firstName: {
@@ -62,13 +62,11 @@ export const GET: RequestHandler = async ({ url }) => {
 export const DELETE: RequestHandler = async ({ url }) => {
 	const id = url.searchParams.get('id');
 
-	const deleteContact = client.locationContact.delete({
+	await client.locationContact.delete({
 		where: {
 			id: id as string
 		}
 	});
-
-	await client.$transaction([deleteContact]);
 
 	return json({ message: '👍 Contact deleted successfully' });
 };

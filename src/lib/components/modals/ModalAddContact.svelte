@@ -3,9 +3,11 @@
 
 	// Stores
 	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import type { ProducerWithIncludes } from '$lib/types/types';
 	import CloseIcon from '$lib/assets/icons/close.svelte';
+	import PhoneInput from '$lib/components/core/PhoneInput.svelte';
+	import EmailInput from '$lib/components/core/EmailInput.svelte';
 	// Props
 	/** Exposes parent props to this component. */
 	export let parent: SvelteComponent;
@@ -15,6 +17,9 @@
 
 	$: console.log('modalStore', $modalStore);
 
+	$: error = {} as { type: 'failure'; status: number; data?: Record<string, unknown> | undefined };
+
+	$: console.log('error', error);
 	const getSalesRepId = () => {
 		return $modalStore[0]?.meta.userData?.publicMetadata?.ts_role === 'ts_rep'
 			? `?salesRepId=${$modalStore[0]?.meta.userData?.id}`
@@ -65,20 +70,22 @@
 			<svelte:component this={CloseIcon} />
 		</button>
 		<div class="flex flex-col space-y-8 container">
-			<h3 class="h3 mb-4">Add Contact</h3>
+			<h3 class="h3 font-semibold mb-4">Add Contact</h3>
 			<!-- {@html $modalStore[0].body} -->
 			<form
 				method="post"
 				action="?/saveContact"
 				use:enhance={() => {
 					return async ({ result, update }) => {
-						await update();
 						if (result?.status === 200) {
+							await update();
+							parent.onClose();
 							toastStore.trigger({ message: '👍 Contact saved successfully' });
-							parent.onClose();
 						} else {
-							toastStore.trigger({ message: '❗️ Contact save failed' });
-							parent.onClose();
+							await applyAction(result);
+							if (result.type === 'failure') {
+								error = { ...result };
+							}
 						}
 						// parent.onClose();
 						// editingProducerStore.set(false);
@@ -147,23 +154,27 @@
 					{/if}
 				</div> -->
 				<!-- <input hidden type="text" name="producerId" value={$modalStore[0]?.meta.producerId} /> -->
-				<input hidden type="text" name="locationId" value={$modalStore[0]?.meta.locationId} />
 				<div class="flex flex-col gap-4 mb-8 pb-8">
 					<span class="flex flex-col items-baseline gap-1">
-						<label class="font-semibold" for="firstName">First Name</label>
-						<input class="input" type="text" id="firstName" name="firstName" />
+						<label class="font-semibold" for="firstName">First Name*</label>
+						<input class="input" type="text" id="firstName" name="firstName" required />
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
-						<label class="font-semibold" for="lastName">Last Name</label>
-						<input class="input" type="text" id="lastName" name="lastName" />
+						<label class="font-semibold" for="lastName">Last Name*</label>
+						<input class="input" type="text" id="lastName" name="lastName" required />
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
-						<label class="font-semibold" for="email">Email</label>
-						<input class="input" type="text" id="email" name="email" />
+						<label class="font-semibold" for="title">Title</label>
+						<input class="input" type="text" id="title" name="title" />
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
-						<label class="font-semibold" for="phone">Phone</label>
-						<input class="input" type="text" id="phone" name="phone" />
+						{#if error.data?.saveContactError}
+							<p class="text-error-500">{error.data?.saveContactError}</p>
+						{/if}
+						<EmailInput name="email" required={true} error={Boolean(error.data?.invalidEmail)} />
+					</span>
+					<span class="flex flex-col items-baseline gap-1">
+						<PhoneInput name="phone" error={Boolean(error.data?.invalidPhone)} />
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="role">Role</label>
@@ -213,7 +224,7 @@
 						</span>
 					</div>
 				</div> -->
-				<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
+				<div class="grid grid-cols-2 gap-4">
 					<span class="flex flex-col items-baseline gap-1">
 						<!-- {#if $creatingLocationStore} -->
 						<button

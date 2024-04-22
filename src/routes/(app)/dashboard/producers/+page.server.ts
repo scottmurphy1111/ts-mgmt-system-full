@@ -3,9 +3,13 @@ import { client } from '$lib/server/prisma';
 import { saveProducer } from '$lib/functions/saveProducer';
 import type { ProducerWithIncludes } from '$lib/types/types';
 import type { PageServerLoad } from '../$types';
+import { transporter } from '$lib/server/nodemailer.server';
+import { getRepName } from '$lib/functions/getRepName';
+import clerkClient from '@clerk/clerk-sdk-node';
+import { format } from 'date-fns';
 
-export const load: PageServerLoad = async ({ url, locals }) => {
-	const tsSalesRepId = locals.session?.userId as string;
+export const load: PageServerLoad = async ({ url, depends }) => {
+	depends('data:producer');
 	const searchTerm = url.searchParams.get('q');
 	const limit = url.searchParams.get('_limit');
 	const page = url.searchParams.get('_page');
@@ -13,7 +17,6 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 	const order = url.searchParams.get('_order');
 	const salesRepId = url.searchParams.get('salesRepId');
 
-	console.log('tsSalesRepId', tsSalesRepId);
 	const count = await client.producer.count();
 	const producers = await client.producer.findMany({
 		where: {
@@ -52,7 +55,7 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 		}
 	});
 
-	// console.log('🥶 producers', producers);
+	console.log('🥶 producers', producers);
 
 	return {
 		count,
@@ -422,5 +425,197 @@ export const actions: Actions = {
 		// };
 
 		// uploadObject();
+	},
+	completeEnrollment: async ({ request, locals }) => {
+		const tsSalesRepId = locals.session?.userId as string;
+		const formData = await request.formData();
+
+		const producerId = formData.get('producerId');
+
+		const producer = await client.producer.findUnique({
+			where: {
+				id: producerId as string
+			},
+			include: {
+				locations: {
+					include: {
+						locationContacts: true,
+						locationPrograms: {
+							include: {
+								locationMarkups: true
+							}
+						},
+						locationNotes: true
+					}
+				}
+			}
+		});
+
+		console.log('producer 🇦🇪', producer);
+
+		const reps = await clerkClient.organizations.getOrganizationMembershipList({
+			organizationId: 'org_2c6L4NwAT5uaKfVM9A06p3OxwQw',
+			limit: 100
+		});
+
+		const sendEmail = () => {
+			const mailOptions = {
+				from: '"TruckSuite LLC System" <trucksuitellc@gmail.com>',
+				to: 'scott.murphy@trucksuite.com, debbi@trucksuite.com',
+				subject: `New Producer Enrollment Submission from ${producer?.name} - submitted by ${getRepName(tsSalesRepId, reps)}`,
+				html: `
+          <h2>Producer Information</h2>
+          <p style="margin:0px;">Name: ${producer?.name}</p>
+          <p style="margin:0px;">Created At: ${format(producer?.createdAt as Date, 'MM/dd/yyyy - hh:mm:ss a')}</p>
+          <p style="margin:0px;">Submitted At: ${format(new Date(), 'MM/dd/yyyy - hh:mm:ss a')}</p>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:16px;">
+            <p style="margin:0px;">Type: ${producer?.type}</p>
+            <p style="margin:0px;">DBA: ${producer?.dba}</p>
+            <p style="margin:0px;">Tax Id: ${producer?.taxId}</p>
+            <p style="margin:0px;">Website: ${producer?.website}</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:16px;">
+            <p style="margin:0px;">${producer?.address}</p>
+            <p style="margin:0px;">${producer?.city}, ${producer?.state} ${producer?.zip}</p>
+            <p style="margin:0px;">${producer?.country}</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:16px;">
+            <p style="margin:0px;">Name: ${producer?.primaryContactName}</p>
+            <p style="margin:0px;">Title: ${producer?.primaryContactTitle}</p>
+            <p style="margin:0px;">Email: ${producer?.primaryContactEmail}</p>
+            <p style="margin:0px;">Phone: ${producer?.primaryContactPhone}</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:16px;">
+            <h3>TS Sales Rep</h3>
+            <p style="margin:0px;">${getRepName(producer?.tsSalesRepId as string, reps)}</p>
+          </div>
+          <h3>Locations</h3>
+          <p style="margin:0px;">Number of Locations: ${producer?.locations.length}</p>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:16px;">
+            ${producer?.locations
+							.map((location, idx) => {
+								return `
+                  <div style="padding:16px;box-sizing:border-box;${idx + 1 < producer?.locations.length ? `background-color:#eeeeee;` : ''}">
+                    <span>Location ${idx + 1}</span>
+                    <h4 style="margin-top:8px;margin-bottom:8px;">Location Info</h4>
+                    <p style="margin:0px;">Name: ${location.name}</p>
+                    <p style="margin:0px;">Phone: ${location.phone}</p>
+                    <p style="margin:0px;">Email: ${location.email}</p>
+                    <p style="margin:0px;">Website: ${location.website}</p>
+                    <p style="margin:0px;">Address:</p>
+                    <p style="margin:0px;">${location.address}</p>
+                    <p style="margin:0px;">${location.city}, ${location.state} ${location.zip}</p>
+                    <p style="margin:0px;">${location.country}</p>
+                    <p style="margin:0px;">Main Location: ${location.main ? 'Yes' : 'No'}</p>
+                    ${
+											location.mailingAddress
+												? `<p style="margin:0px;">Mailing Address:</p>
+                        <p style="margin:0px;">${location.mailingAddress}</p>
+                    <p style="margin:0px;">${location.mailingCity}, ${location.mailingState} ${location.mailingZip}</p>
+                    <p style="margin:0px;">${location.mailingCountry}</p>`
+												: ''
+										}
+                    <h4 style="margin-top:8px;margin-bottom:8px;">Contacts</h4>
+                      ${location.locationContacts
+												.map((contact) => {
+													return `
+                          <div style="margin-bottom:8px;">
+                            <p style="margin:0px;">Name: ${contact.firstName} ${contact.lastName}</p>
+                            <p style="margin:0px;">Title: ${contact.title}</p>
+                            <p style="margin:0px;">Phone: ${contact.phone}</p>
+                            <p style="margin:0px;">Email: ${contact.email}</p>
+                            <p style="margin:0px;">Role: ${contact.role}</p>
+                          </div>
+                        `;
+												})
+												.join('')}
+                    <h4 style="margin-top:8px;margin-bottom:8px;">Programs</h4>
+                    ${location.locationPrograms
+											.map((program) => {
+												return `
+                        <div>
+                          <p style="margin:0px;">${program.name}</p>
+                          <div style="display:flex;gap:16px;">
+                            ${program.locationMarkups
+															.sort((a, b) => {
+																if (a.termValue < b.termValue) {
+																	return -1;
+																}
+																if (a.termValue > b.termValue) {
+																	return 1;
+																}
+																return 0;
+															})
+															.map((markup) => {
+																return `
+                                <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:16px;margin-right: 8px">
+                                  <p style="margin:0px;">${markup.termValue}</p>
+                                  <p style="margin:0px;font-weight:600;">$${Number(markup.markupValue).toLocaleString()}</p>
+                                </div>
+
+                              `;
+															})
+															.join('')}
+                          </div>
+                        </div>
+                      `;
+											})
+											.join('')}
+                   
+                    ${
+											location.locationNotes.length
+												? `
+                        <h4 style="margin-top:8px;margin-bottom:8px;">Notes</h4>
+                         ${location.locationNotes
+														.map((note) => {
+															return `
+                        <div>
+                          <p style="margin:0px;">${note.note}</p>
+                        </div>`;
+														})
+														.join('')}`
+												: ''
+										}
+                  </div>`;
+							})
+							.join('')}
+          </div>
+          <div>Once complete, please click the link below to activate the producer.</div>
+          <a href="https://system.trucksuite.com/dashboard/producers/${producerId}/activate">Activate Producer</a>
+        `
+			};
+
+			// send mail with defined transport object
+			return transporter.sendMail(mailOptions, async function (error, info) {
+				if (error) {
+					return console.log(error);
+				}
+
+				console.log('Message sent: ' + info.response);
+			});
+		};
+
+		sendEmail();
+		await client.producer.update({
+			where: {
+				id: producerId as string
+			},
+			data: {
+				status: 'PENDING'
+			}
+		});
+	},
+	activateProducer: async ({ request }) => {
+		const formData = await request.formData();
+
+		const producerId = formData.get('producerId');
+		await client.producer.update({
+			where: {
+				id: producerId as string
+			},
+			data: {
+				status: 'ACTIVE'
+			}
+		});
 	}
 };

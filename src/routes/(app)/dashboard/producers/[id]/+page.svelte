@@ -10,14 +10,14 @@
 	import { getContext } from 'svelte';
 	import type { Writable } from 'svelte/store';
 	import StatusBadge from '$lib/components/core/StatusBadge.svelte';
+	import { getRepName } from '$lib/functions/getRepName';
 
 	export let data;
 	export let form;
 
 	$: ({ producer, userData, reps } = data);
 
-	// $: console.log('producer', producer);
-	// $: console.log('reps', reps);
+	$: console.log('🙆‍♀️producer', producer);
 	$: console.log('userData', userData);
 
 	const modalStore = getModalStore();
@@ -59,18 +59,20 @@
 		}
 	});
 
-	const getRepName = (id: string) => {
-		console.log('id', id);
-		const rep = reps?.find((rep) => {
-			return rep.publicUserData?.userId === id;
-		});
-		return `${rep?.publicUserData?.firstName} ${rep?.publicUserData?.lastName}`;
-	};
+	// const getRepName = (id: string) => {
+	// 	console.log('id', id);
+	// 	const rep = reps?.find((rep) => {
+	// 		return rep.publicUserData?.userId === id;
+	// 	});
+	// 	return `${rep?.publicUserData?.firstName} ${rep?.publicUserData?.lastName}`;
+	// };
 
 	let producerLocations: LocationWithIncludes[] = [];
 	$: if (producer.locations) {
 		producerLocations = producer?.locations;
 	}
+
+	$: console.log('producerLocations', producerLocations);
 
 	const handler = new DataHandler<LocationWithIncludes>(producerLocations, {
 		rowsPerPage: 9999,
@@ -79,8 +81,10 @@
 
 	const rows = handler.getRows();
 
-	handler.onChange((state: State) => reload(state, userData?.id, 'locations'));
-	handler.invalidate();
+	handler.onChange((state: State) => reload(state, 'locations', { producerId: producer.id }));
+	$: if (producerLocations.length > 0) {
+		handler.invalidate();
+	}
 </script>
 
 <div class="flex flex-col gap-4 p-8">
@@ -111,7 +115,10 @@
 				</div>
 			{/if}
 		</div>
-		<h4 class="h4 font-semibold">Primary Contact</h4>
+		<div class="flex flex-col gap-2">
+			<span>{producer.address}</span>
+			<span>{producer.city}, {producer.state} {producer.zip} {producer.country}</span>
+		</div>
 		<div class="flex gap-8 w-full mb-4 pb-8 border-b border-surface-200">
 			<div class="flex flex-col gap-2">
 				<span class="font-semibold text-base">Name</span>
@@ -135,7 +142,7 @@
 		<div class="flex gap-8 w-full mb-4 pb-8 border-b border-surface-200">
 			<div class="flex flex-col gap-2">
 				<span class="font-semibold text-base">Ts Sales Rep</span>
-				<p>{getRepName(producer.tsSalesRepId)}</p>
+				<p>{getRepName(producer.tsSalesRepId, reps)}</p>
 			</div>
 		</div>
 		<h4 class="h4 font-semibold">Locations</h4>

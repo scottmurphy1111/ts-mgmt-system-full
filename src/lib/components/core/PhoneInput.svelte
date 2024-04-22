@@ -24,7 +24,7 @@
 </script>
 
 <label class="font-semibold" for={name}
-	>Phone{required && '*'}
+	>Phone{required ? '*' : ''}
 	{#if error}
 		<span class="text-error-500-400-token text-sm ml-4"> Phone Number is invalid </span>
 	{/if}

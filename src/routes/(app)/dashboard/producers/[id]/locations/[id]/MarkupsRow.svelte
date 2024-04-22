@@ -21,8 +21,11 @@
 	$: console.log('sortedMarkups', sortedMarkups);
 </script>
 
-<span class="flex items-center">
-	{#each sortedMarkups as markup, i}
-		{markup.termValue} - ${markup.markupValue}{#if i !== sortedMarkups.length - 1}{@html ',&nbsp;&nbsp;'}{/if}
+<div class="grid grid-cols-2 items-start w-full">
+	{#each sortedMarkups as markup}
+		<div>
+			{markup.termValue} -
+			<span class="font-semibold"> ${Number(markup.markupValue).toLocaleString()}</span>
+		</div>
 	{/each}
-</span>
+</div>

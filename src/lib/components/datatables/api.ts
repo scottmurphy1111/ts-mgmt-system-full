@@ -1,12 +1,27 @@
 import { appHost } from '$lib/helpers/helpers';
 import type { State } from '@vincjo/datatables/remote';
 
-export const reload = async <T>(state: State, salesRepId?: string, type: string = 'producers') => {
-	const response = await fetch(`${appHost}/api/${type}?${getParams(state, salesRepId)}`);
+export const reload = async <T>(
+	state: State,
+	type: string = 'producers',
+	options?: {
+		salesRepId?: string;
+		producerId?: string;
+		locationId?: string;
+	}
+) => {
+	const response = await fetch(`${appHost}/api/${type}?${getParams(state, options)}`);
 	return response.json() as T;
 };
 
-const getParams = (state: State, salesRepId?: string) => {
+const getParams = (
+	state: State,
+	options?: {
+		salesRepId?: string;
+		producerId?: string;
+		locationId?: string;
+	}
+) => {
 	const { pageNumber, rowsPerPage, sort, search } = state;
 
 	let params = `_page=${pageNumber}`;
@@ -26,8 +41,14 @@ const getParams = (state: State, salesRepId?: string) => {
 		params += `&q=${search}`;
 	}
 
-	if (salesRepId) {
-		params += `&salesRepId=${salesRepId}`;
+	if (options?.salesRepId) {
+		params += `&salesRepId=${options?.salesRepId}`;
+	}
+	if (options?.producerId) {
+		params += `&producerId=${options?.producerId}`;
+	}
+	if (options?.locationId) {
+		params += `&locationId=${options?.locationId}`;
 	}
 	return params;
 };

@@ -6,8 +6,8 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { states_and_provinces } from '$lib/helpers/states_and_provinces';
 	import type { ProducerWithIncludes } from '$lib/types/types';
-	import PhoneInput from '../core/PhoneInput.svelte';
-	import EmailInput from '../core/EmailInput.svelte';
+	import PhoneInput from '$lib/components/core/PhoneInput.svelte';
+	import EmailInput from '$lib/components/core/EmailInput.svelte';
 	import type { ActionResult } from '@sveltejs/kit';
 	import type { Writable } from 'svelte/store';
 	import CloseIcon from '$lib/assets/icons/close.svelte';
@@ -75,7 +75,7 @@
 			<svelte:component this={CloseIcon} />
 		</button>
 		<div class="flex flex-col space-y-8 container">
-			<h3 class="h3 mb-4">Add Location</h3>
+			<h3 class="h3 font-semibold mb-4">Add Location</h3>
 			<!-- {@html $modalStore[0].body} -->
 			<form
 				method="post"
@@ -127,7 +127,7 @@
 										{#each producers as producer}
 											<option
 												selected={producer.id === $modalStore[0]?.meta.producerId}
-												value={$modalStore[0]?.meta.producerId}>{producer.name}</option
+												value={producer.id}>{producer.name}</option
 											>
 										{/each}
 									{/if}
@@ -199,8 +199,8 @@
 							<input class="input" type="text" id="address" name="address" />
 						</span>
 					</div>
-					<div class="flex gap-2">
-						<span class="flex flex-col items-baseline gap-1">
+					<div class="flex gap-2 w-full">
+						<span class="flex flex-col items-baseline gap-1 w-full">
 							<label class="font-semibold" for="city">City*</label>
 							<input class="input" type="text" id="city" name="city" />
 						</span>
@@ -217,7 +217,7 @@
 							<label class="font-semibold" for="zip">Zip*</label>
 							<input class="input" type="text" id="zip" name="zip" />
 						</span>
-						<span class="flex flex-col items-baseline gap-1">
+						<span class="flex flex-col items-baseline gap-1 w-48">
 							<label class="font-semibold" for="country">Country*</label>
 							<select class="select" name="country">
 								<option value={'USA'} selected>United States</option>
@@ -266,7 +266,7 @@
 						>
 					</div>
 				</div>
-				<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
+				<div class="grid grid-cols-2 gap-4">
 					<span class="flex flex-col items-baseline gap-1">
 						<!-- {#if $creatingLocationStore} -->
 						<button

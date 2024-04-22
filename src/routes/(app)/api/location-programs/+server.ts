@@ -8,7 +8,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	const page = url.searchParams.get('_page');
 	const orderBy = url.searchParams.get('_sort');
 	const order = url.searchParams.get('_order');
-	const salesRepId = url.searchParams.get('salesRepId');
+	const locationId = url.searchParams.get('locationId');
 
 	if (id) {
 		const program = await client.locationProgram.findUnique({
@@ -21,7 +21,7 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	const programs = await client.locationProgram.findMany({
 		where: {
-			...(salesRepId ? { tsSalesRepId: salesRepId } : {}),
+			...(locationId ? { locationId: locationId } : {}),
 			OR: [
 				{
 					name: {

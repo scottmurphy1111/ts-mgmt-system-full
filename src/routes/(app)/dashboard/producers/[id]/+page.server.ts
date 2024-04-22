@@ -13,6 +13,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		}
 	});
 
+	// console.log('producer', producer);
 	return {
 		producer: producer as ProducerWithIncludes
 	};

@@ -9,22 +9,21 @@
 	export let location: LocationWithIncludes;
 	export let error: string | undefined;
 
-	$: console.log('location', location);
-
+	const toastStore = getToastStore();
 	let notes: LocationNote[] = [];
 
 	$: if (location.locationNotes) {
 		notes = location.locationNotes;
 	}
-
-	const toastStore = getToastStore();
 </script>
 
 {#each notes.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)) as note}
 	<div class="flex items-center justify-between border-b border-surface-200 py-2">
-		<div class="flex justify-between w-full">
-			<div class="text-sm font-semibold">{note.note}</div>
-			<div class="text-sm text-gray-500">{format(note.createdAt, 'MM/dd/yyyy - hh:mm:ss a')}</div>
+		<div class="flex gap-4 justify-between w-full">
+			<div class="text-sm">{note.note}</div>
+			<div class="text-sm font-semibold text-gray-500 min-w-48">
+				{format(note.createdAt, 'MM/dd/yyyy - hh:mm:ss a')}
+			</div>
 		</div>
 	</div>
 {/each}
@@ -32,6 +31,7 @@
 	<p class="text-error-500">{error}</p>
 {/if}
 <form
+	class="flex flex-col gap-4"
 	method="post"
 	action="?/saveNote"
 	use:enhance={() => {
@@ -47,7 +47,13 @@
 		};
 	}}
 >
-	<textarea class="textarea" name="note" placeholder="Enter note here"></textarea>
+	<textarea
+		class="textarea"
+		name="note"
+		placeholder="Enter note here"
+		required
+		on:focus={() => (error = '')}
+	></textarea>
 	<button type="submit" class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
 		>+ Add Note</button
 	>

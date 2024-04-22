@@ -8,9 +8,9 @@ export const GET: RequestHandler = async ({ url }) => {
 	const page = url.searchParams.get('_page');
 	const orderBy = url.searchParams.get('_sort');
 	const order = url.searchParams.get('_order');
-	const salesRepId = url.searchParams.get('salesRepId');
+	const producerId = url.searchParams.get('producerId');
 
-	console.log('salesRepId', salesRepId);
+	console.log('❤️producerId', producerId);
 
 	if (id) {
 		const location = await client.tsLocation.findUnique({
@@ -23,7 +23,7 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	const locations = await client.tsLocation.findMany({
 		where: {
-			...(salesRepId ? { tsSalesRepId: salesRepId } : {}),
+			...(producerId ? { producerId: producerId } : {}),
 			OR: [
 				{
 					name: {

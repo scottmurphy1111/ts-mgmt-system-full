@@ -12,6 +12,7 @@
 	import EmailInput from '$lib/components/core/EmailInput.svelte';
 	import { page } from '$app/stores';
 	import type { ActionData } from '../$types.js';
+	import { states_and_provinces } from '$lib/helpers/states_and_provinces';
 
 	export let data;
 	export let form;
@@ -65,6 +66,7 @@
 					editingProducerStore.set(false);
 					pendingStore.set(false);
 					toastStore.trigger({ message: '👍 Producer saved successfully' });
+					goto('/dashboard/producers');
 				} else {
 					await applyAction(result);
 					pendingStore.set(false);
@@ -122,6 +124,40 @@
 				<!-- value={$createdProducerContext?.website}
 					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 			</span>
+		</div>
+		<div class="flex flex-col gap-4 mb-8 pb-8 border-b border-surface-200">
+			<div>
+				<span class="flex flex-col items-baseline gap-1">
+					<label class="font-semibold" for="address">Address*</label>
+					<input class="input" type="text" id="address" name="address" />
+				</span>
+			</div>
+			<div class="flex w-full gap-2">
+				<span class="flex flex-col items-baseline gap-1 w-full">
+					<label class="font-semibold" for="city">City*</label>
+					<input class="input" type="text" id="city" name="city" />
+				</span>
+				<span class="flex flex-col items-baseline gap-1">
+					<label class="font-semibold" for="state">State*</label>
+					<select class="select" name="state">
+						<option selected disabled>Select State</option>
+						{#each states_and_provinces as state}
+							<option value={state.abbreviation}>{state.name}</option>
+						{/each}
+					</select>
+				</span>
+				<span class="flex flex-col items-baseline gap-1">
+					<label class="font-semibold" for="zip">Zip*</label>
+					<input class="input" type="text" id="zip" name="zip" />
+				</span>
+				<span class="flex flex-col items-baseline gap-1 w-48">
+					<label class="font-semibold" for="country">Country*</label>
+					<select class="select" name="country">
+						<option value={'USA'} selected>United States</option>
+						<option value={'CAN'}>Canada</option>
+					</select></span
+				>
+			</div>
 		</div>
 		<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
 			<span class="flex flex-col items-baseline gap-1">
@@ -260,7 +296,7 @@
 				<button
 					type="button"
 					class="btn bg-gradient-to-br from-error-500 to-error-700 text-white"
-					on:click={() => goto('/dashboard')}>Cancel</button
+					on:click={() => goto('/dashboard/producers')}>Cancel</button
 				>
 			</div>
 		</div>

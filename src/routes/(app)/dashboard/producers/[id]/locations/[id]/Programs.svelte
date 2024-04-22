@@ -12,9 +12,9 @@
 	import { DataHandler, type State } from '@vincjo/datatables/remote';
 	import MarkupsRow from './MarkupsRow.svelte';
 	import DeleteIcon from '$lib/assets/icons/delete.svelte';
-	import { invalidateAll } from '$app/navigation';
-	import { getContext } from 'svelte';
-	import type { Writable } from 'svelte/store';
+	import { invalidate, invalidateAll } from '$app/navigation';
+	import { getContext, setContext } from 'svelte';
+	import { writable, type Writable } from 'svelte/store';
 
 	export let location: LocationWithIncludes;
 	export let ratesheets: Ratesheet[];
@@ -37,14 +37,15 @@
 			component: 'modalAddPrograms',
 			backdropClasses: 'overflow-y-scroll',
 			meta: {
-				locationId: location?.id,
 				ratesheets,
+				locationId: location.id,
 				assignedPrograms: programs
 			},
 			response: (response) => {
 				console.log('response', response);
 				if (!response) {
 					handler.invalidate();
+					invalidate('data:location');
 				}
 			}
 		};
@@ -94,8 +95,13 @@
 
 	const rows = handler.getRows();
 
-	handler.onChange((state: State) => reload(state, undefined, 'location-programs'));
-	handler.invalidate();
+	handler.onChange((state: State) =>
+		reload(state, 'location-programs', { locationId: location.id })
+	);
+
+	$: if (programs) {
+		handler.invalidate();
+	}
 </script>
 
 <Datatable {handler} rowsPerPage={false} pagination={false} search={false}>
@@ -120,7 +126,7 @@
 			{:then $rows}
 				{#if $rows.length === 0}
 					<tr>
-						<td colspan="3">No Programs assigned, Click below to Add Programs</td>
+						<td colspan="3">No Programs assigned</td>
 					</tr>
 				{:else}
 					{#each $rows as program}
