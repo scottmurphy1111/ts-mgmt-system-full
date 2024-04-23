@@ -604,18 +604,5 @@ export const actions: Actions = {
 				status: 'PENDING'
 			}
 		});
-	},
-	activateProducer: async ({ request }) => {
-		const formData = await request.formData();
-
-		const producerId = formData.get('producerId');
-		await client.producer.update({
-			where: {
-				id: producerId as string
-			},
-			data: {
-				status: 'ACTIVE'
-			}
-		});
 	}
 };

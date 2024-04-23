@@ -131,18 +131,6 @@
 		};
 		modalStore.trigger(modalCompleteEnrollment);
 	};
-
-	const modalActivateProducer: ModalSettings = {
-		type: 'confirm',
-		title: 'Activate Producer',
-		body: 'Are you sure you want to activate this producer?',
-		response: (response) => {
-			console.log('response', response);
-			if (response) {
-				activateForm.requestSubmit();
-			}
-		}
-	};
 </script>
 
 {#if userData}
@@ -246,20 +234,10 @@
 														>Complete Enrollment</button
 													>{/if}
 												{#if producer.status === 'PENDING' && userData?.publicMetadata?.ts_role === 'admin'}
-													<form
-														method="post"
-														action="?/activateProducer"
-														use:enhance
-														bind:this={activateForm}
+													<a
+														href={`/dashboard/producers/${producer.id}/activate`}
+														class="flex text-primary-500 items-center">Activate</a
 													>
-														<input type="hidden" name="producerId" value={producer.id} />
-														<button
-															type="button"
-															class="flex text-primary-500 items-center"
-															on:click={() => modalStore.trigger(modalActivateProducer)}
-															>Activate</button
-														>
-													</form>
 												{/if}
 											</td></tr
 										>
