@@ -1,3 +1,7 @@
+import {
+	GOOGLE_APP_TRUCKSUITE_SYSTEM_PASS,
+	GOOGLE_APP_TRUCKSUITE_SYSTEM_USER
+} from '$env/static/private';
 import nodemailer from 'nodemailer';
 const transporter = nodemailer.createTransport({
 	service: 'gmail',
@@ -5,8 +9,8 @@ const transporter = nodemailer.createTransport({
 	secure: false,
 	port: 587,
 	auth: {
-		user: 'trucksuitellc@gmail.com',
-		pass: 'mgtkkacpubxszhpf'
+		user: GOOGLE_APP_TRUCKSUITE_SYSTEM_USER,
+		pass: GOOGLE_APP_TRUCKSUITE_SYSTEM_PASS
 	}
 });
 
