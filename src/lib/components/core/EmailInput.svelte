@@ -5,6 +5,7 @@
 	export let required = false;
 	export let placeholder = '';
 	export let error = false;
+	export let value = '';
 
 	const formatInput = (val: string) => {
 		const match = val.match(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/);
@@ -18,7 +19,7 @@
 		formattedInput.set(formatInput(val));
 	};
 
-	const formattedInput = writable<string | null>(null);
+	const formattedInput = writable<string | null>(value || null);
 </script>
 
 <label class="font-semibold" for={name}
@@ -32,7 +33,7 @@
 	class="input"
 	{name}
 	{placeholder}
-	value={$formattedInput}
+	bind:value={$formattedInput}
 	on:change={(val) => updateValue(val.currentTarget.value)}
 	on:focus={() => (error = false)}
 	{required}

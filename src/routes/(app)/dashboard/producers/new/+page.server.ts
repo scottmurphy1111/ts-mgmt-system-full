@@ -5,7 +5,6 @@ export const actions: Actions = {
 	createProducer: async ({ request }) => {
 		const formData = await request.formData();
 
-		const producerId = formData.get('producerId') as string;
 		const name = formData.get('name') as string;
 		const dba = formData.get('dba') as string;
 		const taxId = formData.get('taxId') as string;
@@ -40,30 +39,8 @@ export const actions: Actions = {
 		}
 
 		try {
-			const producer = await client.producer.upsert({
-				where: {
-					id: producerId
-				},
-				include: {
-					locations: true
-				},
-				update: {
-					name,
-					dba,
-					taxId,
-					website,
-					type,
-					address,
-					city,
-					state,
-					zip,
-					country,
-					primaryContactName,
-					primaryContactPhone,
-					primaryContactEmail,
-					primaryContactTitle
-				},
-				create: {
+			const producer = await client.producer.create({
+				data: {
 					name,
 					dba,
 					taxId,

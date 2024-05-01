@@ -155,30 +155,66 @@
 				</div> -->
 				<!-- <input hidden type="text" name="producerId" value={$modalStore[0]?.meta.producerId} /> -->
 				<div class="flex flex-col gap-4 mb-8 pb-8">
+					<input hidden name="id" value={$modalStore[0].meta.contact?.id ?? null} />
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="firstName">First Name*</label>
-						<input class="input" type="text" id="firstName" name="firstName" required />
+						<input
+							class="input"
+							type="text"
+							id="firstName"
+							name="firstName"
+							value={$modalStore[0].meta.contact?.firstName ?? ''}
+							required
+						/>
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="lastName">Last Name*</label>
-						<input class="input" type="text" id="lastName" name="lastName" required />
+						<input
+							class="input"
+							type="text"
+							id="lastName"
+							name="lastName"
+							value={$modalStore[0].meta.contact?.lastName ?? ''}
+							required
+						/>
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="title">Title</label>
-						<input class="input" type="text" id="title" name="title" />
+						<input
+							class="input"
+							type="text"
+							id="title"
+							name="title"
+							value={$modalStore[0].meta.contact?.title ?? ''}
+						/>
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
 						{#if error.data?.saveContactError}
 							<p class="text-error-500">{error.data?.saveContactError}</p>
 						{/if}
-						<EmailInput name="email" required={true} error={Boolean(error.data?.invalidEmail)} />
+						<EmailInput
+							name="email"
+							required={true}
+							error={Boolean(error.data?.invalidEmail)}
+							value={$modalStore[0].meta.contact?.email ?? ''}
+						/>
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
-						<PhoneInput name="phone" error={Boolean(error.data?.invalidPhone)} />
+						<PhoneInput
+							name="phone"
+							error={Boolean(error.data?.invalidPhone)}
+							value={$modalStore[0].meta.contact?.phone ?? ''}
+						/>
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="role">Role</label>
-						<select class="select" id="role" name="role" required>
+						<select
+							class="select"
+							id="role"
+							name="role"
+							value={$modalStore[0].meta.contact?.role ?? ''}
+							required
+						>
 							<option value={'ADMIN'}>Admin</option>
 							<option value={'SALES'}>Sales</option>
 						</select>
@@ -227,11 +263,7 @@
 				<div class="grid grid-cols-2 gap-4">
 					<span class="flex flex-col items-baseline gap-1">
 						<!-- {#if $creatingLocationStore} -->
-						<button
-							type="submit"
-							class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
-							>Save Contact</button
-						>
+						<button type="submit" class="btn-primary w-min">Save Contact</button>
 						<!-- {/if} -->
 					</span>
 				</div>

@@ -62,10 +62,8 @@
 		{/each}
 	{/if}
 	{#if !$creatingLocationStore}
-		<button
-			type="button"
-			on:click={() => creatingLocationStore.set(true)}
-			class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min">+ Add Location</button
+		<button type="button" on:click={() => creatingLocationStore.set(true)} class="btn-primary w-min"
+			>+ Add Location</button
 		>
 	{/if}
 	{#if $creatingLocationStore}
@@ -78,12 +76,12 @@
 				<button
 					type="button"
 					on:click={addLocation}
-					class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
+					class="btn-primary w-min"
 					>+ Add Location</button
 				>
 			{/if}
 			{#if $creatingLocationStore}
-				<button type="submit" class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
+				<button type="submit" class="btn-primary w-min"
 					>Save Location</button
 				>
 			{/if}

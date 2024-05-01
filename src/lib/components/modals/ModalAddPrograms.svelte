@@ -248,11 +248,7 @@
 				<div class="grid grid-cols-2 gap-4">
 					<span class="flex flex-col items-baseline gap-1">
 						<!-- {#if $creatingLocationStore} -->
-						<button
-							type="submit"
-							class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
-							>Save Programs</button
-						>
+						<button type="submit" class="btn-primary w-min">Save Programs</button>
 						<!-- {/if} -->
 					</span>
 				</div>

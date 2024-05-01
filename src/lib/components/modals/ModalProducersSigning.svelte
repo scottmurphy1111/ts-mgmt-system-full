@@ -41,13 +41,11 @@
 			<div class="flex w-full gap-4 justify-start">
 				<a
 					href="/dashboard/producers/send-agreement"
-					class="btn bg-gradient-to-br variant-gradient-primary-secondary text-wrap"
+					class="btn-primary text-wrap"
 					on:click={parent.onClose}>Send Producer Agreement for e-signature</a
 				>
-				<a
-					href="/dashboard/producers/new"
-					class="btn bg-gradient-to-br from-success-700 to-success-800 text-wrap text-white"
-					on:click={parent.onClose}>Proceed with Create a New Producer</a
+				<a href="/dashboard/producers/new" class="btn-success text-wrap" on:click={parent.onClose}
+					>Proceed with Create a New Producer</a
 				>
 			</div>
 		</div>

@@ -86,23 +86,11 @@
 	<div class="grid grid-cols-2 gap-4 mb-4 relative">
 		<span class="flex flex-col items-baseline gap-1 absolute top-0 right-0">
 			{#if !$editingLocationStore}
-				<button
-					type="button"
-					class="btn bg-gradient-to-br variant-gradient-primary-secondary"
-					on:click={editingLocation}
-				>
-					Edit
-				</button>
+				<button type="button" class="btn-primary" on:click={editingLocation}> Edit </button>
 			{/if}
 
 			{#if $editingLocationStore}
-				<button
-					type="submit"
-					class="btn bg-gradient-to-br variant-gradient-primary-secondary"
-					on:click={editingLocation}
-				>
-					Save
-				</button>
+				<button type="submit" class="btn-primary" on:click={editingLocation}> Save </button>
 			{/if}
 		</span>
 		<h3 class="h3">{location?.name}</h3>

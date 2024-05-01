@@ -10,6 +10,7 @@
 	import { writable } from 'svelte/store';
 	import SpinnerIcon from '$lib/assets/icons/spinner.svelte';
 	import ModalAddLocation from '$lib/components/modals/ModalAddLocation.svelte';
+	import ModalEditProducer from '$lib/components/modals/ModalEditProducer.svelte';
 	import ModalAddContact from '$lib/components/modals/ModalAddContact.svelte';
 	import ModalAddPrograms from '$lib/components/modals/ModalAddPrograms.svelte';
 	import ModalCompleteEnrollment from '$lib/components/modals/ModalCompleteEnrollment.svelte';
@@ -21,6 +22,7 @@
 		modalAddContact: { ref: ModalAddContact },
 		modalAddPrograms: { ref: ModalAddPrograms },
 		modalCompleteEnrollment: { ref: ModalCompleteEnrollment },
+		modalEditProducer: { ref: ModalEditProducer },
 
 		//remove??
 		assignProgramsModal: { ref: AssignProgramsModal },

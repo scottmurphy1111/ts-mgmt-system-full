@@ -10,10 +10,8 @@
 <div class="flex flex-col gap-4 mb-8 pb-8 border-b border-surface-200">
 	<h4 class="h4 font-semibold">Portal Users</h4>
 	<input hidden type="text" name="locationId" value={locationId} />
-	<button
-		type="button"
-		on:click={() => (creatingLocationContact = true)}
-		class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min">+ Add Portal User</button
+	<button type="button" on:click={() => (creatingLocationContact = true)} class="btn-primary w-min"
+		>+ Add Portal User</button
 	>
 	{#if creatingLocationContact}
 		<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
@@ -54,7 +52,7 @@
 			<button
 				type="button"
 				on:click={() => (creatingLocationContact = false)}
-				class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
+				class="btn-primary w-min"
 			>
 				Save
 			</button>

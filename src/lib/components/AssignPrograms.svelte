@@ -53,9 +53,7 @@
 			{#each ratesheets.sort( (a, b) => (a.name < b.name ? 1 : a.name > b.name ? -1 : 0) ) as ratesheet}
 				<!-- <ProgramRow {ratesheet} /> -->
 			{/each}
-			<button type="submit" class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
-				>Save</button
-			>
+			<button type="submit" class="btn-primary w-min">Save</button>
 		</form>
 	</div>
 {/await}

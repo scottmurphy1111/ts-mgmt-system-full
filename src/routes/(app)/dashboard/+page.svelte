@@ -8,6 +8,7 @@
 	import DeleteOutput from '$lib/components/DeleteOutput.svelte';
 
 	export let data: PageData;
+	$: console.log('🥶 ALL SHARED DATA', data);
 	// $: ({ producers } = data);
 </script>
 
@@ -27,7 +28,7 @@
 					</header>
 					<section></section>
 					<footer>
-						<button class="btn bg-gradient-to-br variant-gradient-primary-secondary">Launch</button>
+						<button class="btn-primary">Launch</button>
 					</footer></a
 				>
 				<a
@@ -38,7 +39,7 @@
 					</header>
 					<section></section>
 					<footer>
-						<button class="btn bg-gradient-to-br variant-gradient-primary-secondary">Launch</button>
+						<button class="btn-primary">Launch</button>
 					</footer></a
 				>
 				<a
@@ -51,7 +52,7 @@
 					</header>
 					<section></section>
 					<footer>
-						<button class="btn bg-gradient-to-br variant-gradient-primary-secondary">Launch</button>
+						<button class="btn-primary">Launch</button>
 					</footer></a
 				>
 				<!-- {#if data.userData?.publicMetadata?.ts_role === 'admin'}
@@ -63,7 +64,7 @@
 						</header>
 						<section></section>
 						<footer>
-							<button class="btn bg-gradient-to-br variant-gradient-primary-secondary"
+							<button class="btn-primary"
 								>Launch</button
 							>
 						</footer></a
@@ -76,7 +77,7 @@
 						</header>
 						<section></section>
 						<footer>
-							<button class="btn bg-gradient-to-br variant-gradient-primary-secondary"
+							<button class="btn-primary"
 								>Launch</button
 							>
 						</footer></a
@@ -89,7 +90,7 @@
 						</header>
 						<section></section>
 						<footer>
-							<button class="btn bg-gradient-to-br variant-gradient-primary-secondary"
+							<button class="btn-primary"
 								>Launch</button
 							>
 						</footer></a

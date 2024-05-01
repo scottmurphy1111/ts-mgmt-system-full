@@ -3,11 +3,41 @@
 	import Contacts from './Contacts.svelte';
 	import Notes from './Notes.svelte';
 	import Programs from './Programs.svelte';
+	import { ProducerStatus, type LocationWithIncludes } from '$lib/types/types';
+	import { getModalStore } from '@skeletonlabs/skeleton';
+	import type { Writable } from 'svelte/store';
 
 	export let data;
 	export let form;
 
-	$: ({ location, ratesheets } = data);
+	$: ({ location, userData, producerStatus, ratesheets, reps } = data);
+
+	const modalStore = getModalStore();
+	const pendingStore = getContext<Writable<Boolean>>('pendingStore');
+
+	const editLocation = (location: LocationWithIncludes) => {
+		modalStore.trigger({
+			type: 'component',
+			component: 'modalAddLocation',
+			backdropClasses: 'overflow-y-scroll',
+			meta: {
+				producerId: location.producerId,
+				producerName: location.name,
+				location,
+				tsSalesRepId: userData?.publicMetadata?.ts_role === 'ts_rep' ? userData?.id : undefined,
+				userData,
+				reps,
+				form
+			},
+			response: (response) => {
+				console.log('response', response);
+				pendingStore.set(true);
+				if (!response) {
+					pendingStore.set(false);
+				}
+			}
+		});
+	};
 </script>
 
 <div class="flex flex-col gap-4 p-8">
@@ -18,6 +48,13 @@
 					{location.name}
 				</h2>
 			</div>
+			{#if userData?.publicMetadata.ts_role === 'admin' || (userData?.publicMetadata.ts_role === 'ts_rep' && producerStatus && producerStatus.status === ProducerStatus['STARTED'])}
+				<div>
+					<button type="button" class="btn-primary" on:click={() => editLocation(location)}
+						>Edit</button
+					>
+				</div>
+			{/if}
 		</div>
 		<div class="flex justify-between w-full">
 			<div class="flex gap-8 w-full mb-4 pb-8 border-b border-surface-200">

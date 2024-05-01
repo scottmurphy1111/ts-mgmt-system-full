@@ -170,9 +170,6 @@
 {#if error}
 	<p class="text-error-500">{error}</p>
 {/if}
-<button
-	type="button"
-	on:click={addPrograms}
-	class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
+<button type="button" on:click={addPrograms} class="btn-primary w-min"
 	>+ Edit / Assign Programs</button
 >

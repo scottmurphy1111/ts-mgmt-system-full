@@ -11,7 +11,7 @@
 			href="https://secure.na3.adobesign.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhCMZEaXYs42F5WIT8184_dUi9gigYp9nz6tF-SE4fN818MLM3YnFzs8e9mLZiH3rD4*"
 			target="_blank"
 			rel="noopener"
-			class="btn bg-gradient-to-br variant-gradient-primary-secondary">Launch E-Signature</a
+			class="btn-primary">Launch E-Signature</a
 		>
 		<iframe
 			title="Adobe Sign Agreement"
@@ -50,7 +50,7 @@
 					/>
 				</span>
 			</div>
-			<div class="flex gap-4 w-1/2">
+			<!-- <div class="flex gap-4 w-1/2">
 				<span class="flex flex-col items-baseline gap-1 w-full">
 					<label for="salesRepEmail">TruckSuite Sales Rep Email</label>
 					<input
@@ -61,11 +61,9 @@
 						placeholder="Enter Trucksuite Sales Rep's Email "
 					/>
 				</span>
-			</div>
+			</div> -->
 			<div class="w-auto">
-				<button class="btn flex bg-gradient-to-br variant-gradient-primary-secondary"
-					>Send Agreement</button
-				>
+				<button class="btn-primary flex">Send Agreement</button>
 				{#if form?.message}
 					<p class="text-error-500">{form.message}</p>
 				{/if}

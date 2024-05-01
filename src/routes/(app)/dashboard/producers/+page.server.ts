@@ -3,10 +3,12 @@ import { client } from '$lib/server/prisma';
 import { saveProducer } from '$lib/functions/saveProducer';
 import type { ProducerWithIncludes } from '$lib/types/types';
 import type { PageServerLoad } from '../$types';
-import { transporter } from '$lib/server/nodemailer.server';
+// import { transporter } from '$lib/server/nodemailer.server';
 import { getRepName } from '$lib/functions/getRepName';
 import clerkClient from '@clerk/clerk-sdk-node';
 import { format } from 'date-fns';
+import { SENDGRID_API_KEY } from '$env/static/private';
+import sgMail from '@sendgrid/mail';
 
 export const load: PageServerLoad = async ({ url, depends }) => {
 	depends('data:producer');
@@ -458,11 +460,13 @@ export const actions: Actions = {
 			limit: 100
 		});
 
-		const sendEmail = () => {
+		const sendEmail = async () => {
 			const mailOptions = {
-				from: '"TruckSuite LLC System" <trucksuitellc@gmail.com>',
-				to: 'scott.murphy@trucksuite.com, debbi@trucksuite.com',
+				to: ['scott.murphy@trucksuite.com', 'debbi@trucksuite.com'],
+				// from: GOOGLE_APP_TRUCKSUITE_SYSTEM_USER,
+				from: 'support@trucksuite.com',
 				subject: `New Producer Enrollment Submission from ${producer?.name} - submitted by ${getRepName(tsSalesRepId, reps)}`,
+				text: 'New Producer Enrollment Submission',
 				html: `
           <h2>Producer Information</h2>
           <p style="margin:0px;">Name: ${producer?.name}</p>
@@ -493,6 +497,15 @@ export const actions: Actions = {
           <p style="margin:0px;">Number of Locations: ${producer?.locations.length}</p>
           <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:16px;">
             ${producer?.locations
+							.sort((a, b) => {
+								if (a.main) {
+									return -1;
+								}
+								if (b.main) {
+									return 1;
+								}
+								return 0;
+							})
 							.map((location, idx) => {
 								return `
                   <div style="padding:16px;box-sizing:border-box;${idx + 1 < producer?.locations.length ? `background-color:#eeeeee;` : ''}">
@@ -502,14 +515,14 @@ export const actions: Actions = {
                     <p style="margin:0px;">Phone: ${location.phone}</p>
                     <p style="margin:0px;">Email: ${location.email}</p>
                     <p style="margin:0px;">Website: ${location.website}</p>
-                    <p style="margin:0px;">Address:</p>
+                    <br />
                     <p style="margin:0px;">${location.address}</p>
                     <p style="margin:0px;">${location.city}, ${location.state} ${location.zip}</p>
                     <p style="margin:0px;">${location.country}</p>
                     <p style="margin:0px;">Main Location: ${location.main ? 'Yes' : 'No'}</p>
                     ${
 											location.mailingAddress
-												? `<p style="margin:0px;">Mailing Address:</p>
+												? `<br /><p style="margin:0px;">Mailing Address:</p>
                         <p style="margin:0px;">${location.mailingAddress}</p>
                     <p style="margin:0px;">${location.mailingCity}, ${location.mailingState} ${location.mailingZip}</p>
                     <p style="margin:0px;">${location.mailingCountry}</p>`
@@ -586,16 +599,20 @@ export const actions: Actions = {
 			};
 
 			// send mail with defined transport object
-			return transporter.sendMail(mailOptions, async function (error, info) {
-				if (error) {
-					return console.log(error);
-				}
-
-				console.log('Message sent: ' + info.response);
-			});
+			sgMail.setApiKey(SENDGRID_API_KEY);
+			return sgMail
+				.sendMultiple(mailOptions)
+				.then((info) => {
+					console.log('Message sent: ' + info);
+				})
+				.catch((error) => {
+					if (error) {
+						return console.log(JSON.stringify(error, null, 2));
+					}
+				});
 		};
 
-		sendEmail();
+		await sendEmail();
 		await client.producer.update({
 			where: {
 				id: producerId as string

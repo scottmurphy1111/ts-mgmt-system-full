@@ -154,7 +154,7 @@
 						<button
 							type="button"
 							on:click={addLocation}
-							class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
+							class="btn-primary w-min"
 							>+ Add Location</button
 						>
 					{/if}
@@ -162,7 +162,7 @@
 						<button
 							type="button"
 							on:click={saveLocation}
-							class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
+							class="btn-primary w-min"
 							>Save Location</button
 						>
 					{/if}
@@ -209,14 +209,14 @@
 				</div>
 				<div class="flex gap-2">
 					<div class="flex">
-						<button type="submit" class="btn bg-gradient-to-br variant-gradient-primary-secondary"
+						<button type="submit" class="btn-primary"
 							>Submit</button
 						>
 					</div>
 					<div class="flex">
 						<button
 							type="button"
-							class="btn bg-gradient-to-br from-error-500 to-error-700 text-white"
+							class="btn-error"
 							on:click={() => goto('/dashboard')}>Cancel</button
 						>
 					</div>

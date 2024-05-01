@@ -46,11 +46,7 @@
 
 	$: producers = getProducers();
 
-	$: console.log('modalStore', $modalStore);
-
 	$: error = {} as { type: 'failure'; status: number; data?: Record<string, unknown> | undefined };
-
-	$: console.log('error', error);
 
 	// const sendToAgreements = () => {
 	// 	console.log('sendToAgreements');
@@ -75,7 +71,7 @@
 			<svelte:component this={CloseIcon} />
 		</button>
 		<div class="flex flex-col space-y-8 container">
-			<h3 class="h3 font-semibold mb-4">Add Location</h3>
+			<h3 class="h3 font-semibold mb-4">Add/Edit Location</h3>
 			<!-- {@html $modalStore[0].body} -->
 			<form
 				method="post"
@@ -102,6 +98,12 @@
 					};
 				}}
 			>
+				<input
+					hidden
+					type="text"
+					name="locationId"
+					value={$modalStore[0]?.meta.location?.id ?? null}
+				/>
 				<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
 					{#if $modalStore[0]?.meta.userData?.publicMetadata?.ts_role === 'ts_rep'}
 						<span class="flex flex-col items-baseline gap-1">
@@ -118,7 +120,12 @@
 					{#if $modalStore[0]?.meta.userData?.publicMetadata?.ts_role === 'admin'}
 						<span class="flex flex-col items-baseline gap-1">
 							<label class="font-semibold" for="name">Producer</label>
-							<select class="select" name="producerId" required>
+							<select
+								class="select"
+								name="producerId"
+								value={$modalStore[0].meta.location?.producerId}
+								required
+							>
 								<option disabled selected>Select Producer</option>
 								{#await producers}
 									<!-- Show loading state -->
@@ -179,34 +186,69 @@
 				<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="name">Location Name*</label>
-						<input class="input" type="text" id="name" name="name" required />
+						<input
+							class="input"
+							type="text"
+							id="name"
+							name="name"
+							value={$modalStore[0].meta.location?.name ?? ''}
+							required
+						/>
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
-						<PhoneInput name="phone" required={true} error={Boolean(error.data?.invalidPhone)} />
+						<PhoneInput
+							name="phone"
+							required={true}
+							value={$modalStore[0].meta.location?.phone ?? ''}
+							error={Boolean(error.data?.invalidPhone)}
+						/>
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
-						<EmailInput name="email" required={true} error={Boolean(error.data?.invalidEmail)} />
+						<EmailInput
+							name="email"
+							required={true}
+							value={$modalStore[0].meta.location?.email ?? ''}
+							error={Boolean(error.data?.invalidEmail)}
+						/>
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="website">Website</label>
-						<input class="input" type="text" id="website" name="website" />
+						<input
+							class="input"
+							type="text"
+							id="website"
+							name="website"
+							value={$modalStore[0].meta.location?.website ?? ''}
+						/>
 					</span>
 				</div>
 				<div class="flex flex-col gap-4 mb-8 pb-8 border-b border-surface-200">
 					<div>
 						<span class="flex flex-col items-baseline gap-1">
 							<label class="font-semibold" for="address">Address*</label>
-							<input class="input" type="text" id="address" name="address" />
+							<input
+								class="input"
+								type="text"
+								id="address"
+								name="address"
+								value={$modalStore[0].meta.location?.address ?? ''}
+							/>
 						</span>
 					</div>
 					<div class="flex gap-2 w-full">
 						<span class="flex flex-col items-baseline gap-1 w-full">
 							<label class="font-semibold" for="city">City*</label>
-							<input class="input" type="text" id="city" name="city" />
+							<input
+								class="input"
+								type="text"
+								id="city"
+								name="city"
+								value={$modalStore[0].meta.location?.city ?? ''}
+							/>
 						</span>
 						<span class="flex flex-col items-baseline gap-1">
 							<label class="font-semibold" for="state">State*</label>
-							<select class="select" name="state">
+							<select class="select" name="state" value={$modalStore[0].meta.location?.state ?? ''}>
 								<option selected disabled>Select State</option>
 								{#each states_and_provinces as state}
 									<option value={state.abbreviation}>{state.name}</option>
@@ -215,11 +257,21 @@
 						</span>
 						<span class="flex flex-col items-baseline gap-1">
 							<label class="font-semibold" for="zip">Zip*</label>
-							<input class="input" type="text" id="zip" name="zip" />
+							<input
+								class="input"
+								type="text"
+								id="zip"
+								name="zip"
+								value={$modalStore[0].meta.location?.zip ?? ''}
+							/>
 						</span>
 						<span class="flex flex-col items-baseline gap-1 w-48">
 							<label class="font-semibold" for="country">Country*</label>
-							<select class="select" name="country">
+							<select
+								class="select"
+								name="country"
+								value={$modalStore[0].meta.location?.country ?? ''}
+							>
 								<option value={'USA'} selected>United States</option>
 								<option value={'CAN'}>Canada</option>
 							</select></span
@@ -228,7 +280,13 @@
 					<div class="flex gap-2">
 						<span class="flex flex-col items-baseline gap-1">
 							<label class="font-semibold" for="main">Main Location?</label>
-							<input class="checkbox" type="checkbox" id="main" name="main" />
+							<input
+								class="checkbox"
+								type="checkbox"
+								id="main"
+								name="main"
+								value={$modalStore[0].meta.location?.main ?? false}
+							/>
 						</span>
 					</div>
 				</div>
@@ -236,17 +294,33 @@
 					<div>
 						<span class="flex flex-col items-baseline gap-1">
 							<label class="font-semibold" for="mailingAddress">Mailing Address</label>
-							<input class="input" type="text" id="mailingAddress" name="mailingAddress" />
+							<input
+								class="input"
+								type="text"
+								id="mailingAddress"
+								name="mailingAddress"
+								value={$modalStore[0].meta.location?.mailingAddress ?? ''}
+							/>
 						</span>
 					</div>
 					<div class="flex gap-2">
 						<span class="flex flex-col items-baseline gap-1">
 							<label class="font-semibold" for="mailingCity">City</label>
-							<input class="input" type="text" id="mailingCity" name="mailingCity" />
+							<input
+								class="input"
+								type="text"
+								id="mailingCity"
+								name="mailingCity"
+								value={$modalStore[0].meta.location?.mailingCity ?? ''}
+							/>
 						</span>
 						<span class="flex flex-col items-baseline gap-1">
 							<label class="font-semibold" for="mailingState">State</label>
-							<select class="select" name="mailingState">
+							<select
+								class="select"
+								name="mailingState"
+								value={$modalStore[0].meta.location?.mailingState ?? ''}
+							>
 								<option selected disabled>Select State</option>
 								{#each states_and_provinces as state}
 									<option value={state.abbreviation}>{state.name}</option>
@@ -255,11 +329,21 @@
 						</span>
 						<span class="flex flex-col items-baseline gap-1">
 							<label class="font-semibold" for="mailingZip">Zip</label>
-							<input class="input" type="text" id="mailingZip" name="mailingZip" />
+							<input
+								class="input"
+								type="text"
+								id="mailingZip"
+								name="mailingZip"
+								value={$modalStore[0].meta.location?.mailingZip ?? ''}
+							/>
 						</span>
 						<span class="flex flex-col items-baseline gap-1">
 							<label class="font-semibold" for="mailingCountry">Country</label>
-							<select class="select" name="mailingCountry">
+							<select
+								class="select"
+								name="mailingCountry"
+								value={$modalStore[0].meta.location?.mailingCountry ?? ''}
+							>
 								<option value={'USA'} selected>United States</option>
 								<option value={'CAN'}>Canada</option>
 							</select></span
@@ -269,11 +353,7 @@
 				<div class="grid grid-cols-2 gap-4">
 					<span class="flex flex-col items-baseline gap-1">
 						<!-- {#if $creatingLocationStore} -->
-						<button
-							type="submit"
-							class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
-							>Save Location</button
-						>
+						<button type="submit" class="btn-primary w-min">Save Location</button>
 						<!-- {/if} -->
 					</span>
 				</div>

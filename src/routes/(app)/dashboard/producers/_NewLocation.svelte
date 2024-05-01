@@ -146,9 +146,7 @@
 	<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
 		<span class="flex flex-col items-baseline gap-1">
 			{#if $creatingLocationStore}
-				<button type="submit" class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
-					>Save Location</button
-				>
+				<button type="submit" class="btn-primary w-min">Save Location</button>
 			{/if}
 		</span>
 	</div>

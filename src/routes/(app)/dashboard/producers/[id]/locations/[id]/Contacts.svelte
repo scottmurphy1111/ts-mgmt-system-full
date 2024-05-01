@@ -9,6 +9,7 @@
 	import { DataHandler, type State } from '@vincjo/datatables/remote';
 	import { getContext } from 'svelte';
 	import DeleteIcon from '$lib/assets/icons/delete.svelte';
+	import EditIcon from '$lib/assets/icons/edit.svelte';
 
 	import type { Writable } from 'svelte/store';
 
@@ -44,6 +45,23 @@
 
 	const addContact = () => {
 		modalStore.trigger(modal);
+	};
+
+	const editContact = (contact: LocationContact) => {
+		modalStore.trigger({
+			type: 'component',
+			component: 'modalAddContact',
+			meta: {
+				locationId: location.id,
+				contact
+			},
+			response: (response) => {
+				console.log('response', response);
+				if (!response) {
+					handler.invalidate();
+				}
+			}
+		});
 	};
 
 	const deleteContact = (id: string) => {
@@ -142,6 +160,14 @@
 							</td>
 							<td class="flex gap-4 items-center">
 								<button
+									title="Edit Contact"
+									class="btn-icon text-primary-500 w-6 h-6"
+									on:click={() => editContact(contact)}
+								>
+									<svelte:component this={EditIcon} />
+								</button>
+								<button
+									title="Delete Contact"
 									class="btn-icon text-error-500 w-6 h-6"
 									on:click={() => deleteContact(contact.id)}
 								>
@@ -156,8 +182,4 @@
 		<!-- {/if} -->
 	</table>
 </Datatable>
-<button
-	type="button"
-	on:click={addContact}
-	class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min">+ Add Contact</button
->
+<button type="button" on:click={addContact} class="btn-primary w-min">+ Add Contact</button>

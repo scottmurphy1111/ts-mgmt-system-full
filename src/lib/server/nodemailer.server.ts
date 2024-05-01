@@ -8,6 +8,7 @@ const transporter = nodemailer.createTransport({
 	host: 'smtp.mail.com',
 	secure: false,
 	port: 587,
+	from: GOOGLE_APP_TRUCKSUITE_SYSTEM_USER,
 	auth: {
 		user: GOOGLE_APP_TRUCKSUITE_SYSTEM_USER,
 		pass: GOOGLE_APP_TRUCKSUITE_SYSTEM_PASS

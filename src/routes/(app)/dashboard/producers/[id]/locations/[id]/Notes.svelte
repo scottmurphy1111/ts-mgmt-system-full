@@ -54,7 +54,5 @@
 		required
 		on:focus={() => (error = '')}
 	></textarea>
-	<button type="submit" class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
-		>+ Add Note</button
-	>
+	<button type="submit" class="btn-primary w-min">+ Add Note</button>
 </form>

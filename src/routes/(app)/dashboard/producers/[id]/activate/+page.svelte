@@ -28,11 +28,7 @@
 				};
 			}}
 		>
-			<button
-				type="submit"
-				class="btn bg-gradient-to-br variant-gradient-primary-secondary text-wrap"
-				>Activate {producer?.name}</button
-			>
+			<button type="submit" class="btn-primary text-wrap">Activate {producer?.name}</button>
 		</form>
 	{/if}
 </div>

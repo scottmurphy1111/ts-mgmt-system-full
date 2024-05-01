@@ -138,13 +138,12 @@
 		<h2 class="h2">Producers</h2>
 		<div class="flex items-start gap-4 mb-4">
 			<button
-				class="btn bg-gradient-to-br variant-gradient-primary-secondary text-wrap"
+				class="btn-primary text-wrap"
 				on:click={() => goto('/dashboard/producers/send-agreement')}
 				>Send Producer Agreements</button
 			>
-			<button
-				class="btn bg-gradient-to-br variant-gradient-primary-secondary text-wrap"
-				on:click={() => modalStore.trigger(modal)}>Create a New Producer</button
+			<button class="btn-primary text-wrap" on:click={() => modalStore.trigger(modal)}
+				>Create a New Producer</button
 			>
 		</div>
 		<div class="flex flex-col gap-8">
@@ -224,7 +223,8 @@
 											<td class="flex gap-4 items-center">
 												<a
 													class="flex text-primary-500 items-center"
-													href={`/dashboard/producers/${producer.id}`}>View</a
+													href={`/dashboard/producers/${producer.id}`}
+													>View {#if producer.status === 'STARTED'}/ Edit{/if}</a
 												>
 												{#if producer.status === 'STARTED'}
 													<button
@@ -317,7 +317,7 @@
 						<button
 							type="button"
 							on:click={addLocation}
-							class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
+							class="btn-primary w-min"
 							>+ Add Location</button
 						>
 					{/if}
@@ -325,7 +325,7 @@
 						<button
 							type="button"
 							on:click={saveLocation}
-							class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
+							class="btn-primary w-min"
 							>Save Location</button
 						>
 					{/if}
@@ -372,14 +372,14 @@
 				</div>
 				<div class="flex gap-2">
 					<div class="flex">
-						<button type="submit" class="btn bg-gradient-to-br variant-gradient-primary-secondary"
+						<button type="submit" class="btn-primary"
 							>Submit</button
 						>
 					</div>
 					<div class="flex">
 						<button
 							type="button"
-							class="btn bg-gradient-to-br from-error-500 to-error-700 text-white"
+							class="btn-error"
 							on:click={() => goto('/dashboard')}>Cancel</button
 						>
 					</div>

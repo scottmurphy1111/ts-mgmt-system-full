@@ -66,7 +66,7 @@
 			{#if !$editingProducerStore}
 				<button
 					type="button"
-					class="btn bg-gradient-to-br variant-gradient-primary-secondary absolute -top-16 right-0"
+					class="btn-primary absolute -top-16 right-0"
 					on:click={editingProducer}
 				>
 					Edit
@@ -76,7 +76,7 @@
 			{#if $editingProducerStore}
 				<button
 					type="submit"
-					class="btn bg-gradient-to-br variant-gradient-primary-secondary absolute -top-16 right-0"
+					class="btn-primary absolute -top-16 right-0"
 					on:click={editingProducer}
 				>
 					Save
@@ -255,16 +255,10 @@
 	{#if !$createdProducerContext?.id}
 		<div class="flex gap-2">
 			<div class="flex">
-				<button type="submit" class="btn bg-gradient-to-br variant-gradient-primary-secondary"
-					>Save</button
-				>
+				<button type="submit" class="btn-primary">Save</button>
 			</div>
 			<div class="flex">
-				<button
-					type="button"
-					class="btn bg-gradient-to-br from-error-500 to-error-700 text-white"
-					on:click={() => goto('/dashboard')}>Cancel</button
-				>
+				<button type="button" class="btn-error" on:click={() => goto('/dashboard')}>Cancel</button>
 			</div>
 		</div>
 	{/if}

@@ -17,7 +17,7 @@
 	<div class="flex items-center gap-2">
 		<input hidden type="text" name="programId" value={program.id} />
 		<input
-			class="checkbox"
+			class="checkbox pointer-events-none"
 			type="checkbox"
 			name="programName"
 			value={program.name}

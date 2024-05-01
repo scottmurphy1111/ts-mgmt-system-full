@@ -74,10 +74,7 @@
 			<h3 class="h3 font-semibold mb-4">{$modalStore[0].title}</h3>
 			{@html $modalStore[0].body}
 			<div class="flex w-full gap-4 justify-start">
-				<button
-					class="btn bg-gradient-to-br from-surface-400 to-surface-500 text-white text-wrap"
-					on:click={parent.onClose}>Cancel</button
-				>
+				<button class="btn-secondary text-wrap" on:click={parent.onClose}>Cancel</button>
 				<form
 					method="post"
 					action="?/completeEnrollment"
@@ -96,10 +93,7 @@
 					}}
 				>
 					<input type="hidden" name="producerId" value={$modalStore[0].meta.producerId} />
-					<button
-						class="btn bg-gradient-to-br variant-gradient-primary-secondary text-wrap text-white"
-						>Proceed with Enrollment</button
-					>
+					<button class="btn-primary text-wrap">Proceed with Enrollment</button>
 				</form>
 			</div>
 		</div>

@@ -18,7 +18,7 @@
 	$: ({ producer, userData, reps } = data);
 
 	$: console.log('🙆‍♀️producer', producer);
-	$: console.log('userData', userData);
+	$: console.log('form', form);
 
 	const modalStore = getModalStore();
 	const pendingStore = getContext<Writable<Boolean>>('pendingStore');
@@ -49,8 +49,35 @@
 		};
 	}
 
+	let editProducerModal: ModalSettings;
+	$: if (producer) {
+		editProducerModal = {
+			type: 'component',
+			component: 'modalEditProducer',
+			backdropClasses: 'overflow-y-scroll',
+			meta: {
+				producer,
+				tsSalesRepId: userData?.publicMetadata?.ts_role === 'ts_rep' ? userData?.id : undefined,
+				reps,
+				userData
+			},
+			response: (response) => {
+				console.log('response', response);
+				pendingStore.set(true);
+				if (!response) {
+					handler.invalidate();
+					pendingStore.set(false);
+				}
+			}
+		};
+	}
+
 	const addLocation = () => {
 		modalStore.trigger(modal);
+	};
+
+	const editProducer = () => {
+		modalStore.trigger(editProducerModal);
 	};
 
 	modalStore.subscribe((value) => {
@@ -89,11 +116,17 @@
 
 <div class="flex flex-col gap-4 p-8">
 	{#if producer}
-		<div class="flex flex-col gap-2 justify-between">
+		<div class="flex gap-2 justify-between">
 			<div class="flex gap-4 items-center w-auto">
 				<h2 class="h2">{producer.name}</h2>
 				<StatusBadge status={producer.status} />
 			</div>
+
+			{#if userData?.publicMetadata.ts_role === 'admin' || (userData?.publicMetadata.ts_role === 'ts_rep' && producer.status === 'STARTED')}
+				<div>
+					<button type="button" class="btn-primary" on:click={editProducer}>Edit</button>
+				</div>
+			{/if}
 		</div>
 		<div class="flex gap-8 w-full mb-4 pb-8 border-b border-surface-200">
 			{#if producer.dba}
@@ -115,9 +148,12 @@
 				</div>
 			{/if}
 		</div>
-		<div class="flex flex-col gap-2">
-			<span>{producer.address}</span>
-			<span>{producer.city}, {producer.state} {producer.zip} {producer.country}</span>
+		<div class="flex gap-8 w-full mb-4 pb-8 border-b border-surface-200">
+			<div class="flex flex-col gap-2">
+				<span class="font-semibold text-base">Address</span>
+				<span>{producer.address}</span>
+				<span>{producer.city}, {producer.state} {producer.zip} {producer.country}</span>
+			</div>
 		</div>
 		<div class="flex gap-8 w-full mb-4 pb-8 border-b border-surface-200">
 			<div class="flex flex-col gap-2">
@@ -137,6 +173,12 @@
 			<div class="flex flex-col gap-2">
 				<span class="font-semibold text-base">Email</span>
 				<p>{producer.primaryContactEmail}</p>
+			</div>
+		</div>
+		<div class="flex gap-8 w-full mb-4 pb-8 border-b border-surface-200">
+			<div class="flex flex-col gap-2">
+				<span class="font-semibold text-base">Type</span>
+				<p>{producer.type.toUpperCase()}</p>
 			</div>
 		</div>
 		<div class="flex gap-8 w-full mb-4 pb-8 border-b border-surface-200">
@@ -214,12 +256,7 @@
 					<!-- {/if} -->
 				</table>
 			</Datatable>
-			<button
-				type="button"
-				on:click={addLocation}
-				class="btn bg-gradient-to-br variant-gradient-primary-secondary w-min"
-				>+ Add Location</button
-			>
+			<button type="button" on:click={addLocation} class="btn-primary w-min">+ Add Location</button>
 		</div>
 	{/if}
 </div>

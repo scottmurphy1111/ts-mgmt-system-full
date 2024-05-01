@@ -21,14 +21,10 @@
 		</div>
 		<h3 class="h3">Sales Tools</h3>
 		<a href="https://rates.trucksuite.com/" target="_blank" rel="noopener">
-			<button class="btn bg-gradient-to-br variant-gradient-primary-secondary"
-				>Ratesheet Tool</button
-			>
+			<button class="btn-primary">Ratesheet Tool</button>
 		</a>
 		<a href="https://calculator.trucksuite.com/" target="_blank" rel="noopener">
-			<button class="btn bg-gradient-to-br variant-gradient-primary-secondary"
-				>Weekly Payments Calculator</button
-			>
+			<button class="btn-primary">Weekly Payments Calculator</button>
 		</a>
 	</div>
 </div>

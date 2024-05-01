@@ -82,7 +82,7 @@
 				{#if !$editingProducerStore}
 					<button
 						type="button"
-						class="btn bg-gradient-to-br variant-gradient-primary-secondary absolute -top-16 right-0"
+						class="btn-primary absolute -top-16 right-0"
 						on:click={editingProducer}
 					>
 						Edit
@@ -92,7 +92,7 @@
 				{#if $editingProducerStore}
 					<button
 						type="submit"
-						class="btn bg-gradient-to-br variant-gradient-primary-secondary absolute -top-16 right-0"
+						class="btn-primary absolute -top-16 right-0"
 						on:click={editingProducer}
 					>
 						Save
@@ -233,10 +233,10 @@
 				<select class="select" id="type" name="type" required>
 					<!-- value={$createdProducerContext?.type}
 					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
-					<option value="dealership">Dealership</option>
-					<option value="lender">Lender</option>
-					<option value="fleet">Fleet</option>
-					<option value="other">Other</option>
+					<option value="dealership">DEALERSHIP</option>
+					<option value="lender">LENDER</option>
+					<option value="fleet">FLEET</option>
+					<option value="other">OTHER</option>
 				</select>
 			</span>
 
@@ -288,15 +288,11 @@
 		<!-- {#if !$createdProducerContext?.id} -->
 		<div class="flex gap-2">
 			<div class="flex">
-				<button type="submit" class="btn bg-gradient-to-br variant-gradient-primary-secondary"
-					>Save</button
-				>
+				<button type="submit" class="btn-primary">Save</button>
 			</div>
 			<div class="flex">
-				<button
-					type="button"
-					class="btn bg-gradient-to-br from-error-500 to-error-700 text-white"
-					on:click={() => goto('/dashboard/producers')}>Cancel</button
+				<button type="button" class="btn-error" on:click={() => goto('/dashboard/producers')}
+					>Cancel</button
 				>
 			</div>
 		</div>

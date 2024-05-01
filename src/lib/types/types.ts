@@ -43,3 +43,10 @@ export type Ratesheet =
 export type RouteParamsApp = RouteParams & {
 	id: string;
 };
+
+export enum ProducerStatus {
+	STARTED = 'STARTED',
+	PENDING = 'PENDING',
+	ACTIVE = 'ACTIVE',
+	INACTIVE = 'INACTIVE'
+}
