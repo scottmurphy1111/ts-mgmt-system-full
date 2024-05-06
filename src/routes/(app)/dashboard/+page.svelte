@@ -24,9 +24,18 @@
 					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full h-min"
 					href="/dashboard/producers"
 					><header>
-						<h3 class="flex gap-2 h3 items-center">Producers</h3>
+						<h4 class="h4">Producers</h4>
 					</header>
-					<section></section>
+					<footer>
+						<button class="btn-primary">Launch</button>
+					</footer></a
+				>
+				<a
+					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full h-min"
+					href="/dashboard/reports"
+					><header>
+						<h4 class="h4">Reports</h4>
+					</header>
 					<footer>
 						<button class="btn-primary">Launch</button>
 					</footer></a
@@ -35,9 +44,8 @@
 					class="card card-hover shadow-md p-8 flex flex-col gap-4 w-full h-min"
 					href="/dashboard/marketing-tools"
 					><header>
-						<h3 class="flex gap-2 h3 items-center">Marketing &amp; Tools</h3>
+						<h4 class="h4">Marketing &amp; Tools</h4>
 					</header>
-					<section></section>
 					<footer>
 						<button class="btn-primary">Launch</button>
 					</footer></a
@@ -48,9 +56,8 @@
 					target="_blank"
 					rel="noopener"
 					><header>
-						<h3 class="flex gap-2 h3 items-center">TecAssured</h3>
+						<h4 class="h4">TecAssured</h4>
 					</header>
-					<section></section>
 					<footer>
 						<button class="btn-primary">Launch</button>
 					</footer></a

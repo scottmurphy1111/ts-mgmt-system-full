@@ -136,7 +136,7 @@
 {#if userData}
 	<div class="flex flex-col gap-4 p-8">
 		<h2 class="h2">Producers</h2>
-		<div class="flex items-start gap-4 mb-4">
+		<div class="flex items-start gap-4 mb-8 pb-8 border-b border-surface-200">
 			<button
 				class="btn-primary text-wrap"
 				on:click={() => goto('/dashboard/producers/send-agreement')}
@@ -146,6 +146,7 @@
 				>Create a New Producer</button
 			>
 		</div>
+
 		<div class="flex flex-col gap-8">
 			<div class="flex flex-col w-full md:w-full gap-4">
 				<Datatable {handler}>

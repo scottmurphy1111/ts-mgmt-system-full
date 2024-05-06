@@ -453,8 +453,6 @@ export const actions: Actions = {
 			}
 		});
 
-		console.log('producer 🇦🇪', producer);
-
 		const reps = await clerkClient.organizations.getOrganizationMembershipList({
 			organizationId: 'org_2c6L4NwAT5uaKfVM9A06p3OxwQw',
 			limit: 100
