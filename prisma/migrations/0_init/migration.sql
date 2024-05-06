@@ -1,32 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `Markup` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Note` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `PortalUser` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `ProducerGroup` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `ProducerLocation` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `ProducerProgram` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropTable
-DROP TABLE `Markup`;
-
--- DropTable
-DROP TABLE `Note`;
-
--- DropTable
-DROP TABLE `PortalUser`;
-
--- DropTable
-DROP TABLE `ProducerGroup`;
-
--- DropTable
-DROP TABLE `ProducerLocation`;
-
--- DropTable
-DROP TABLE `ProducerProgram`;
-
 -- CreateTable
 CREATE TABLE `Producer` (
     `id` VARCHAR(191) NOT NULL,
@@ -41,12 +12,19 @@ CREATE TABLE `Producer` (
     `primaryContactPhone` VARCHAR(191) NOT NULL,
     `primaryContactEmail` VARCHAR(191) NOT NULL,
     `primaryContactTitle` VARCHAR(191) NULL,
+    `tsSalesRepId` VARCHAR(191) NOT NULL,
+    `status` ENUM('STARTED', 'PENDING', 'ACTIVE', 'INACTIVE') NOT NULL DEFAULT 'STARTED',
+    `address` VARCHAR(191) NOT NULL,
+    `city` VARCHAR(191) NOT NULL,
+    `country` VARCHAR(191) NOT NULL DEFAULT 'USA',
+    `state` VARCHAR(191) NOT NULL,
+    `zip` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Location` (
+CREATE TABLE `TsLocation` (
     `id` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
@@ -66,11 +44,11 @@ CREATE TABLE `Location` (
     `mailingCountry` VARCHAR(191) NULL DEFAULT 'USA',
     `tsSalesRepId` VARCHAR(191) NOT NULL,
     `producerId` VARCHAR(191) NULL,
-    `main` BOOLEAN NOT NULL DEFAULT true,
+    `main` BOOLEAN NOT NULL DEFAULT false,
 
-    INDEX `Location_producerId_idx`(`producerId`),
-    INDEX `Location_name_idx`(`name`),
-    INDEX `Location_tsSalesRepId_idx`(`tsSalesRepId`),
+    INDEX `TsLocation_producerId_idx`(`producerId`),
+    INDEX `TsLocation_name_idx`(`name`),
+    INDEX `TsLocation_tsSalesRepId_idx`(`tsSalesRepId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -104,7 +82,7 @@ CREATE TABLE `LocationNote` (
     `id` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
-    `note` VARCHAR(191) NOT NULL,
+    `note` LONGTEXT NOT NULL,
     `locationId` VARCHAR(191) NOT NULL,
 
     INDEX `LocationNote_locationId_idx`(`locationId`),
@@ -120,10 +98,12 @@ CREATE TABLE `LocationContact` (
     `firstName` VARCHAR(191) NOT NULL,
     `lastName` VARCHAR(191) NOT NULL,
     `phone` VARCHAR(191) NULL,
-    `role` VARCHAR(191) NULL,
+    `role` VARCHAR(191) NOT NULL,
     `locationId` VARCHAR(191) NOT NULL,
+    `title` VARCHAR(191) NULL,
 
-    UNIQUE INDEX `LocationContact_email_key`(`email`),
     INDEX `LocationContact_locationId_idx`(`locationId`),
+    UNIQUE INDEX `LocationContact_email_locationId_key`(`email`, `locationId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+

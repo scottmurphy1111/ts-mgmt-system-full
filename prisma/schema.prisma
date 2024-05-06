@@ -1,37 +1,14 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider          = "mysql"
-  url               = env("DATABASE_URL")
+  url               = env("DATABASE_URL") // PROD
+  // url               = env("DEV_DATABASE_URL") // DEV
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
   relationMode      = "prisma"
 }
-
-// REMOVING FOR NOW
-// model TsSalesRep {
-//   id             String          @id @default(uuid())
-//   createdAt      DateTime        @default(now())
-//   updatedAt      DateTime        @updatedAt
-//   firstName      String
-//   lastName       String
-//   address        String
-//   city           String
-//   state          String
-//   zip            String
-//   country        String          @default("USA")
-//   phone          String
-//   email          String
-//   company        String
-//   notes          String?         @db.Text
-//   producers Producer[]
-
-//   @@index([lastName])
-// }
 
 model Producer {
   id                  String         @id @default(uuid())
@@ -84,7 +61,6 @@ model TsLocation {
   tsSalesRepId     String
   producerId       String?
   producer         Producer?         @relation(fields: [producerId], references: [id], onDelete: SetNull)
-  // customers       Customer[]
   locationPrograms LocationProgram[]
   locationContacts LocationContact[]
   locationNotes    LocationNote[]
@@ -145,4 +121,19 @@ model LocationContact {
 
   @@unique([email, locationId])
   @@index([locationId])
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  address   String
+  city      String
+  state     String
+  zip       String
+  country   String   @default("USA")
 }
