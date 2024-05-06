@@ -5,6 +5,7 @@ import type { ProducerWithIncludes } from '$lib/types/types';
 import type { PageServerLoad } from '../$types';
 // import { transporter } from '$lib/server/nodemailer.server';
 import { getRepName } from '$lib/functions/getRepName';
+import { getUserName } from '$lib/functions/getUserName';
 import clerkClient from '@clerk/clerk-sdk-node';
 import { format } from 'date-fns';
 import { SENDGRID_API_KEY } from '$env/static/private';
@@ -458,12 +459,16 @@ export const actions: Actions = {
 			limit: 100
 		});
 
+		const users = await clerkClient.users.getUserList({
+			limit: 100
+		});
+
 		const sendEmail = async () => {
 			const mailOptions = {
 				to: ['scott.murphy@trucksuite.com', 'debbi@trucksuite.com'],
 				// from: GOOGLE_APP_TRUCKSUITE_SYSTEM_USER,
 				from: 'support@trucksuite.com',
-				subject: `New Producer Enrollment Submission from ${producer?.name} - submitted by ${getRepName(tsSalesRepId, reps)}`,
+				subject: `New Producer Enrollment Submission from ${producer?.name} - submitted by ${getUserName(tsSalesRepId, users)}`,
 				text: 'New Producer Enrollment Submission',
 				html: `
           <h2>Producer Information</h2>

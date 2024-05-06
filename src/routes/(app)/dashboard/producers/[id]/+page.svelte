@@ -10,7 +10,7 @@
 	import { getContext } from 'svelte';
 	import type { Writable } from 'svelte/store';
 	import StatusBadge from '$lib/components/core/StatusBadge.svelte';
-	import { getRepName } from '$lib/functions/getRepName';
+	import { getRepName } from '$lib/functions/getRepName.js';
 
 	export let data;
 	export let form;
@@ -85,14 +85,6 @@
 			invalidateAll();
 		}
 	});
-
-	// const getRepName = (id: string) => {
-	// 	console.log('id', id);
-	// 	const rep = reps?.find((rep) => {
-	// 		return rep.publicUserData?.userId === id;
-	// 	});
-	// 	return `${rep?.publicUserData?.firstName} ${rep?.publicUserData?.lastName}`;
-	// };
 
 	let producerLocations: LocationWithIncludes[] = [];
 	$: if (producer.locations) {
@@ -242,10 +234,6 @@
 												class="flex text-primary-500 items-center"
 												href={`/dashboard/producers/${producer.id}/locations/${location.id}`}
 												>View</a
-											>
-											<a
-												class="flex text-primary-500 items-center"
-												href={`/dashboard/producer-enrollment/${location.id}`}>Complete</a
 											>
 										</td>
 									</tr>
