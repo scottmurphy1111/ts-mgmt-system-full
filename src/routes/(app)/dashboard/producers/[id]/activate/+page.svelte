@@ -12,6 +12,7 @@
 <div class="flex flex-col p-8 w-full">
 	{#if message}
 		<p>{message}</p>
+		<a class="link" href="/dashboard/producers">Back to Producers</a>
 	{:else if form?.activationError}
 		<p>{form?.activationError}</p>
 	{:else}

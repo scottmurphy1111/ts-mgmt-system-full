@@ -1,6 +1,6 @@
 import { SENDGRID_API_KEY } from '$env/static/private';
 import { client } from '$lib/server/prisma';
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
 import sgMail from '@sendgrid/mail';
 
 export const load = async ({ params }) => {
@@ -22,7 +22,7 @@ export const actions = {
 	default: async ({ params }) => {
 		if (!params.id) {
 			return fail(400, {
-				message: 'Producer Id not provided'
+				activationError: 'Producer Id not provided'
 			});
 		}
 
@@ -62,12 +62,7 @@ export const actions = {
 			};
 
 			sgMail.setApiKey(SENDGRID_API_KEY);
-			const result = await sgMail.send(mailOptions);
-			console.log('result', result);
-
-			if (result[0].statusCode === 202) {
-				return redirect(302, '/dashboard/producers');
-			}
+			await sgMail.send(mailOptions);
 		};
 
 		await emailProducer();
