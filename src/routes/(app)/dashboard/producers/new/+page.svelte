@@ -44,6 +44,11 @@
 
 	const editingProducerStore = writable(false);
 
+	// Redirect to producer page after create
+	$: if (form?.producer?.id) {
+		goto(`/dashboard/producers/${form?.producer?.id}`);
+	}
+
 	function editingProducer() {
 		editingProducerStore.set(true);
 	}
@@ -66,7 +71,6 @@
 					editingProducerStore.set(false);
 					pendingStore.set(false);
 					toastStore.trigger({ message: '👍 Producer saved successfully' });
-					goto('/dashboard/producers');
 				} else {
 					await applyAction(result);
 					pendingStore.set(false);

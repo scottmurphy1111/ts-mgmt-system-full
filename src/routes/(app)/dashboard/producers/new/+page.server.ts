@@ -59,17 +59,12 @@ export const actions: Actions = {
 				}
 			});
 
-			// if (upload) {
-			// 	uploadProducerAgreement(name, upload);
-			// }
-
 			return {
 				producer
 			};
 		} catch (e) {
-			console.log('e', e);
 			return fail(422, {
-				saveProducerError: `🥶 Cannot Save Producer ${e}`
+				saveProducerError: `🥶 Cannot Save Producer ${JSON.stringify(e, null, 2)}`
 			});
 		}
 	}

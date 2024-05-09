@@ -78,8 +78,6 @@
 				action="?/saveLocation"
 				use:enhance={() => {
 					return async ({ result, update }) => {
-						console.log('result', result);
-
 						if (result?.status === 200) {
 							await update();
 							parent.onClose();

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import Datatable from '$lib/components/datatables/Datatable.svelte';
 	import ThSort from '$lib/components/datatables/ThSort.svelte';
 	import { reload } from '$lib/components/datatables/api.js';
@@ -47,6 +47,11 @@
 				}
 			}
 		};
+	}
+
+	// Redirect to location page after saving in modal
+	$: if (form?.location?.id) {
+		goto(`/dashboard/producers/${producer?.id}/locations/${form?.location?.id}`);
 	}
 
 	let editProducerModal: ModalSettings;
