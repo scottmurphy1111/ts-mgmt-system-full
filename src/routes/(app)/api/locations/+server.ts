@@ -10,8 +10,6 @@ export const GET: RequestHandler = async ({ url }) => {
 	const order = url.searchParams.get('_order');
 	const producerId = url.searchParams.get('producerId');
 
-	console.log('❤️producerId', producerId);
-
 	if (id) {
 		const location = await client.tsLocation.findUnique({
 			where: {
@@ -71,6 +69,5 @@ export const GET: RequestHandler = async ({ url }) => {
 		}
 	});
 
-	// console.log('locations', locations);
 	return json(locations);
 };

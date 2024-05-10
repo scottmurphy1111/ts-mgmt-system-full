@@ -44,14 +44,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	return json(programs);
 };
 
-export const POST: RequestHandler = async ({ url, request }) => {
-	const locationId = url.searchParams.get('locationId');
-
-	const body = await request.formData();
-
-	console.log('locationId', locationId);
-	console.log('body', [...body]);
-
+export const POST: RequestHandler = async () => {
 	return json({ success: true });
 };
 

@@ -3,7 +3,6 @@
 
 	// Stores
 	import { getModalStore } from '@skeletonlabs/skeleton';
-	import { goto } from '$app/navigation';
 	import CloseIcon from '$lib/assets/icons/close.svelte';
 
 	// Props
@@ -12,20 +11,6 @@
 
 	const modalStore = getModalStore();
 
-	const sendToAgreements = () => {
-		// console.log('sendToAgreements');
-		goto('/dashboard/producers/send-agreement');
-		parent.onClose();
-	};
-
-	const sendToNew = () => {
-		// console.log('sendToNew');
-		goto('/dashboard/producers/new');
-
-		parent.onClose();
-	};
-
-	// Notes: Use `w-screen h-screen` to fit the visible canvas size.
 	const cBase =
 		'bg-surface-100-800-token w-auto h-full p-16 flex justify-center items-center rounded-lg relative';
 </script>

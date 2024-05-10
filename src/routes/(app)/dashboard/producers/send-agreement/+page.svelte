@@ -2,28 +2,13 @@
 	import { enhance } from '$app/forms';
 	export let data;
 
-	const { userData, reps } = data;
+	$: ({ userData, reps } = data);
 	export let form;
 </script>
 
 <div class="flex flex-col p-8">
 	<div class="flex flex-col mb-8 gap-8 justify-between">
 		<h2 class="h2">Send Producers Agreement for E-Signature</h2>
-		<!-- <a
-			href="https://secure.na3.adobesign.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhCMZEaXYs42F5WIT8184_dUi9gigYp9nz6tF-SE4fN818MLM3YnFzs8e9mLZiH3rD4*"
-			target="_blank"
-			rel="noopener"
-			class="btn-primary">Launch E-Signature</a
-		>
-		<iframe
-			title="Adobe Sign Agreement"
-			src="https://secure.na3.adobesign.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhCMZEaXYs42F5WIT8184_dUi9gigYp9nz6tF-SE4fN818MLM3YnFzs8e9mLZiH3rD4*&hosted=false"
-			width="100%"
-			height="100%"
-			frameborder="0"
-			style="border: 0; overflow: hidden; min-height: 500px; min-width: 600px;"
-		></iframe> -->
-
 		<form
 			action="?/sendAgreement"
 			method="POST"
@@ -55,8 +40,6 @@
 					<span class="flex flex-col items-baseline gap-1 w-full">
 						<label for="tsSalesRepId">TruckSuite Sales Rep*</label>
 						<select class="select" id="tsSalesRepId" name="tsSalesRepId" required>
-							<!-- value={$createdProducerContext?.tsSalesRepId}
-						disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 							<option value={userData.id}>{userData?.firstName} {userData.lastName}</option>
 						</select>
 					</span>
@@ -65,8 +48,6 @@
 					<span class="flex flex-col items-baseline gap-1 w-full">
 						<label for="tsSalesRepId">TruckSuite Sales Rep*</label>
 						<select class="select" id="tsSalesRepId" name="tsSalesRepId" required>
-							<!-- value={$createdProducerContext?.tsSalesRepId}
-						disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 							<option disabled selected value={null}>Select a Sales Rep</option>
 							{#each reps as rep}
 								<option value={rep.publicUserData?.userId}
@@ -77,18 +58,6 @@
 					</span>
 				{/if}
 			</div>
-			<!-- <div class="flex gap-4 w-1/2">
-				<span class="flex flex-col items-baseline gap-1 w-full">
-					<label for="salesRepEmail">TruckSuite Sales Rep Email</label>
-					<input
-						class="input"
-						type="text"
-						name="salesRepEmail"
-						id="salesRepEmail"
-						placeholder="Enter Trucksuite Sales Rep's Email "
-					/>
-				</span>
-			</div> -->
 			<div class="w-auto">
 				<button class="btn-primary flex">Send Agreement</button>
 				{#if form?.message}

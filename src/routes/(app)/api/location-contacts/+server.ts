@@ -2,10 +2,6 @@ import { client } from '$lib/server/prisma';
 import { json, type RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ url }) => {
-	// console.log('params', params);
-	// console.log('request', request);
-	// console.log('locals', locals);
-	// console.log('rul', url.searchParams);
 	const id = url.searchParams.get('id');
 	const searchTerm = url.searchParams.get('q');
 	const limit = url.searchParams.get('_limit');
@@ -13,8 +9,6 @@ export const GET: RequestHandler = async ({ url }) => {
 	const orderBy = url.searchParams.get('_sort');
 	const order = url.searchParams.get('_order');
 	const locationId = url.searchParams.get('locationId');
-
-	console.log('locationId', locationId);
 
 	if (id) {
 		const contact = await client.locationContact.findUnique({
@@ -55,9 +49,6 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	return json(contacts);
 };
-
-// export const POST: RequestHandler = async ({ body }) => {
-// }
 
 export const DELETE: RequestHandler = async ({ url }) => {
 	const id = url.searchParams.get('id');

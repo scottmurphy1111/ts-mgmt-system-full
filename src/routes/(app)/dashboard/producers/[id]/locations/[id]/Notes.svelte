@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { invalidate, invalidateAll } from '$app/navigation';
+	import { invalidateAll } from '$app/navigation';
 	import type { LocationWithIncludes } from '$lib/types/types';
 	import type { LocationNote } from '@prisma/client';
-	import { getModalStore, getToastStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import { getToastStore } from '@skeletonlabs/skeleton';
 	import { format } from 'date-fns';
 
 	export let location: LocationWithIncludes;

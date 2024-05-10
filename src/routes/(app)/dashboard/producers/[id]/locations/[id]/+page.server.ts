@@ -39,8 +39,6 @@ export const actions: Actions = {
 	saveContact: async ({ request, params }) => {
 		const formData = await request.formData();
 
-		console.log('formData', formData);
-
 		const locationId = params.id as string;
 		const id = formData.get('id') as string;
 		const firstName = formData.get('firstName') as string;
@@ -51,7 +49,6 @@ export const actions: Actions = {
 		const role = formData.get('role') as string;
 
 		if (phone && !phone.match(/^(\+|)(1|)\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/)) {
-			console.log('invalid phone number', phone);
 			return fail(400, {
 				phone,
 				invalidPhone: true
@@ -59,7 +56,6 @@ export const actions: Actions = {
 		}
 
 		if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
-			console.log('invalid email', email);
 			return fail(400, {
 				email,
 				invalidEmail: true
@@ -105,14 +101,12 @@ export const actions: Actions = {
 
 			return { contact, location };
 		} catch (e) {
-			console.log('e', e);
 			return fail(422, {
 				saveContactError: `Error Saving Contact, make sure the Email is unique!`
 			});
 		}
 	},
 	savePrograms: async ({ request, params }) => {
-		console.log('params', params);
 		const formData = await request.formData();
 
 		const programIds = formData.getAll('programId') as string[];
@@ -120,12 +114,6 @@ export const actions: Actions = {
 		const markupIds = formData.getAll('markupId') as string[];
 		const termValues = formData.getAll('termValue') as string[];
 		const markupValues = formData.getAll('markupValue') as string[];
-
-		console.log('programIds', programIds);
-		console.log('markupIds', markupIds);
-		console.log('programNames', programNames);
-		console.log('termValues', termValues);
-		console.log('markupValues', markupValues);
 
 		const formattedPrograms = programNames.reduce(
 			(acc, current, index) => {
@@ -155,7 +143,6 @@ export const actions: Actions = {
 					]
 				};
 
-				console.log('acc', acc);
 				return acc;
 			},
 			{} as Record<
@@ -164,12 +151,8 @@ export const actions: Actions = {
 			>
 		);
 
-		console.log('formattedPrograms', formattedPrograms);
 		try {
 			const createPrograms = Object.entries(formattedPrograms).map(([programName, program], i) => {
-				console.log('programName', programName);
-				console.log('program', program);
-
 				return client.locationProgram.upsert({
 					where: {
 						id: program.id === programIds[i] ? program.id : undefined
@@ -201,18 +184,6 @@ export const actions: Actions = {
 							})
 						}
 					}
-					// data: {
-					// 	name: programName,
-					// 	locationId,
-					// 	locationMarkups: {
-					// 		create: Object.entries(program.markups).map(([termValue, markupValue]) => {
-					// 			return {
-					// 				termValue,
-					// 				markupValue
-					// 			};
-					// 		})
-					// 	}
-					// }
 				});
 			});
 
@@ -271,12 +242,8 @@ export const actions: Actions = {
 	saveLocation: async ({ request }) => {
 		const formData = await request.formData();
 
-		console.log('formData', formData);
-
 		const locationId = formData.get('locationId') as string;
-		console.log('locationId', locationId);
 		const producerId = formData.get('producerId') as string;
-		console.log('producerId', producerId);
 		const name = formData.get('name') as string;
 		const phone = formData.get('phone') as string;
 		const email = formData.get('email') as string;
@@ -292,12 +259,9 @@ export const actions: Actions = {
 		const mailingZip = formData.get('mailingZip') as string;
 		const mailingCountry = formData.get('mailingCountry') as string;
 		const tsSalesRepId = formData.get('tsSalesRepId') as string;
-		console.log('tsSalesRepId', tsSalesRepId);
-		const main = formData.get('main');
-		console.log('main', main);
+		const main = formData.get('main') as string;
 
 		if (!phone.match(/^(\+|)(1|)\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/)) {
-			console.log('invalid phone number', phone);
 			return fail(400, {
 				phone,
 				invalidPhone: true
@@ -305,7 +269,6 @@ export const actions: Actions = {
 		}
 
 		if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
-			console.log('invalid email', email);
 			return fail(400, {
 				email,
 				invalidEmail: true
@@ -334,21 +297,6 @@ export const actions: Actions = {
 						tsSalesRepId: tsSalesRepId as string,
 						producerId: producerId as string,
 						main: main === 'on' ? true : false
-						// programs: {
-						// 	create: formattedProducerPrograms.map((program) => {
-						// 		return {
-						// 			name: program[Object.keys(program)[0]].name,
-						// 			markups: {
-						// 				create: program[Object.keys(program)[0]].markups.map((markup) => {
-						// 					return {
-						// 						termValue: markup.termValue,
-						// 						markupValue: markup.markupValue
-						// 					};
-						// 				})
-						// 			}
-						// 		};
-						// 	})
-						// }
 					}
 				});
 			} else {
@@ -374,21 +322,6 @@ export const actions: Actions = {
 						tsSalesRepId: tsSalesRepId as string,
 						producerId: producerId as string,
 						main: main === 'on' ? true : false
-						// programs: {
-						// 	create: formattedProducerPrograms.map((program) => {
-						// 		return {
-						// 			name: program[Object.keys(program)[0]].name,
-						// 			markups: {
-						// 				create: program[Object.keys(program)[0]].markups.map((markup) => {
-						// 					return {
-						// 						termValue: markup.termValue,
-						// 						markupValue: markup.markupValue
-						// 					};
-						// 				})
-						// 			}
-						// 		};
-						// 	})
-						// }
 					}
 				});
 			}
@@ -407,57 +340,5 @@ export const actions: Actions = {
 				saveLocationError: `Error Saving Location, Please try again! ${e}`
 			});
 		}
-
-		// saveContact: async ({ request }) => {
-		// 	const formData = await request.formData();
-
-		// 	console.log('formData', formData);
-
-		// 	const locationId = formData.get('locationId');
-		// 	console.log('locationId', locationId);
-		// 	const id = formData.get('id');
-		// 	const firstName = formData.get('firstName');
-		// 	const lastName = formData.get('lastName');
-		// 	const phone = formData.get('phone');
-		// 	const email = formData.get('email');
-		// 	const role = formData.get('role');
-
-		// 	let contact;
-
-		// 	if (!id) {
-		// 		contact = await client.locationContact.create({
-		// 			data: {
-		// 				firstName: firstName as string,
-		// 				lastName: lastName as string,
-		// 				phone: phone as string,
-		// 				email: email as string,
-		// 				role: role as string,
-		// 				locationId: locationId as string
-		// 			}
-		// 		});
-		// 	} else {
-		// 		contact = await client.locationContact.update({
-		// 			where: {
-		// 				id: id as string
-		// 			},
-		// 			data: {
-		// 				firstName: firstName as string,
-		// 				lastName: lastName as string,
-		// 				phone: phone as string,
-		// 				email: email as string,
-		// 				role: role as string,
-		// 				locationId: locationId as string
-		// 			}
-		// 		});
-		// 	}
-
-		// 	const location = await client.tsLocation.findUnique({
-		// 		where: {
-		// 			id: locationId as string
-		// 		}
-		// 	});
-
-		// 	return { contact, location };
-		// }
 	}
 };

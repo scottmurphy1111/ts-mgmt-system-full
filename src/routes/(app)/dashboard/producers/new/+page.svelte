@@ -1,60 +1,27 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import InfoCircleIcon from '$lib/assets/icons/info-circle.svelte';
-	import { getModalStore, getToastStore, type ModalSettings } from '@skeletonlabs/skeleton';
-	import paSigned from '$lib/assets/images/pa-signed.jpeg';
-	import type { User, OrganizationMembership } from '@clerk/clerk-sdk-node';
 	import { writable, type Writable } from 'svelte/store';
 	import { getContext } from 'svelte';
-	import type { ProducerWithIncludes } from '$lib/types/types';
 	import PhoneInput from '$lib/components/core/PhoneInput.svelte';
 	import EmailInput from '$lib/components/core/EmailInput.svelte';
-	import { page } from '$app/stores';
-	import type { ActionData } from '../$types.js';
 	import { states_and_provinces } from '$lib/helpers/states_and_provinces';
+	import { getToastStore } from '@skeletonlabs/skeleton';
 
 	export let data;
 	export let form;
 
-	$: console.log('form', form);
-
-	$: console.log('$page', $page);
-	// $: console.log('data', data);
-	const { reps, userData } = data;
-	// $: console.log('userData', userData);
-	// export let reps: OrganizationMembership[];
-	export let producer: ProducerWithIncludes | null;
+	$: ({ reps, userData } = data);
 
 	const pendingStore = getContext<Writable<Boolean>>('pendingStore');
 
-	// const createdProducerContext =
-	// 	getContext<Writable<ProducerWithIncludes>>('createdProducerContext');
-
-	// $: console.log('createdProducerContext', $createdProducerContext);
-
 	const toastStore = getToastStore();
-	const modalStore = getModalStore();
-
-	const instructionsModal: ModalSettings = {
-		type: 'component',
-		component: 'modalImage',
-		image: paSigned
-	};
 
 	const editingProducerStore = writable(false);
 
 	// Redirect to producer page after create
 	$: if (form?.producer?.id) {
 		goto(`/dashboard/producers/${form?.producer?.id}`);
-	}
-
-	function editingProducer() {
-		editingProducerStore.set(true);
-	}
-
-	function openInstructions() {
-		modalStore.trigger(instructionsModal);
 	}
 </script>
 
@@ -80,53 +47,22 @@
 		}}
 	>
 		<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200 relative">
-			<!-- {#if $createdProducerContext?.id}
-				<input hidden type="text" name="producerId" bind:value={$createdProducerContext.id} />
-
-				{#if !$editingProducerStore}
-					<button
-						type="button"
-						class="btn-primary absolute -top-16 right-0"
-						on:click={editingProducer}
-					>
-						Edit
-					</button>
-				{/if}
-
-				{#if $editingProducerStore}
-					<button
-						type="submit"
-						class="btn-primary absolute -top-16 right-0"
-						on:click={editingProducer}
-					>
-						Save
-					</button>
-				{/if}
-			{/if} -->
 			<input hidden type="text" name="producerId" value={undefined} />
 			<span class="flex flex-col items-baseline gap-1">
 				<label class="font-semibold" for="name">Producer Name*</label>
 				<input class="input" type="text" id="name" name="name" required />
-				<!-- value={$createdProducerContext?.name}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 			</span>
 			<span class="flex flex-col items-baseline gap-1">
 				<label class="font-semibold" for="dba">Dba</label>
 				<input class="input" type="text" id="dba" name="dba" />
-				<!-- value={$createdProducerContext?.dba}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 			</span>
 			<span class="flex flex-col items-baseline gap-1">
 				<label class="font-semibold" for="taxId">Tax Id</label>
 				<input class="input" type="text" id="taxId" name="taxId" />
-				<!-- value={$createdProducerContext?.taxId}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 			</span>
 			<span class="flex flex-col items-baseline gap-1">
 				<label class="font-semibold" for="website">Website</label>
 				<input class="input" type="text" id="website" name="website" />
-				<!-- value={$createdProducerContext?.website}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 			</span>
 		</div>
 		<div class="flex flex-col gap-4 mb-8 pb-8 border-b border-surface-200">
@@ -173,70 +109,22 @@
 					name="primaryContactName"
 					required
 				/>
-				<!-- value={$createdProducerContext?.primaryContactName}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 			</span>
 			<span class="flex flex-col items-baseline gap-1">
 				<PhoneInput name="primaryContactPhone" required={true} error={form?.invalidPhone} />
-				<!-- <input
-					class="input"
-					type="tel"
-					id="primaryContactPhone"
-					name="primaryContactPhone"
-					pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-					required
-				/> -->
-				<!-- <MaskInput
-					alwaysShowMask
-					maskChar="_"
-					mask="000-000-0000"
-					class="input"
-					type="text"
-					id="primaryContactPhone"
-					name="primaryContactPhone"
-					required
-				/> -->
-				<!-- <MaskInput
-					mask="(000) 000 - 0000"
-					size={20}
-					showMask
-					alwaysShowMask
-					maskChar="_"
-					class="input"
-					type="text"
-					id="primaryContactPhone"
-					name="primaryContactPhone"
-					required
-				/> -->
-				<!-- value={$createdProducerContext?.primaryContactPhone}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 			</span>
 			<span class="flex flex-col items-baseline gap-1">
-				<!-- <label class="font-semibold" for="primaryContactEmail">Email*</label> -->
 				<EmailInput name="primaryContactEmail" required={true} error={form?.invalidEmail} />
-				<!-- <input
-					class="input"
-					type="email"
-					id="primaryContactEmail"
-					name="primaryContactEmail"
-					required
-				/> -->
-				<!-- value={$createdProducerContext?.primaryContactEmail}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 			</span>
 			<span class="flex flex-col items-baseline gap-1">
 				<label class="font-semibold" for="primaryContactTitle">Title</label>
 				<input class="input" type="text" id="primaryContactTitle" name="primaryContactTitle" />
-				<!-- value={$createdProducerContext?.primaryContactTitle}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 			</span>
 		</div>
 		<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
 			<span class="flex flex-col items-baseline gap-1">
 				<label class="font-semibold" for="type">Type*</label>
 				<select class="select" id="type" name="type" required>
-					<!-- value={$createdProducerContext?.type}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 					<option value="dealership">DEALERSHIP</option>
 					<option value="lender">LENDER</option>
 					<option value="fleet">FLEET</option>
@@ -248,8 +136,6 @@
 				<span class="flex flex-col items-baseline gap-1">
 					<label class="font-semibold" for="tsSalesRepId">TruckSuite Sales Rep*</label>
 					<select class="select" id="tsSalesRepId" name="tsSalesRepId" required>
-						<!-- value={$createdProducerContext?.tsSalesRepId}
-						disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 						<option value={userData.id}>{userData?.firstName} {userData.lastName}</option>
 					</select>
 				</span>
@@ -258,8 +144,6 @@
 				<span class="flex flex-col items-baseline gap-1">
 					<label class="font-semibold" for="tsSalesRepId">TruckSuite Sales Rep*</label>
 					<select class="select" id="tsSalesRepId" name="tsSalesRepId" required>
-						<!-- value={$createdProducerContext?.tsSalesRepId}
-						disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 						<option disabled selected value={null}>Select a Sales Rep</option>
 						{#each reps as rep}
 							<option value={rep.publicUserData?.userId}
@@ -270,26 +154,6 @@
 				</span>
 			{/if}
 		</div>
-		<!-- {#if !$createdProducerContext?.id}
-		<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
-			<span class="flex flex-col items-baseline gap-1">
-				<label class="flex gap-1 font-semibold" for="upload"
-					>Upload Signed Producer Agreement <button
-						type="button"
-						class="flex"
-						on:click={openInstructions}
-					>
-						<span class="flex w-4 h-4 mr-2">
-							<svelte:component this={InfoCircleIcon} />
-						</span>
-					</button>
-				</label>
-				<input type="file" id="upload" name="upload" accept="application/pdf" /> -->
-		<!--  // ADD BAck Required ❗️❗️❗️❗️ ☝️ -->
-		<!-- </span>
-		</div>
-	{/if} -->
-		<!-- {#if !$createdProducerContext?.id} -->
 		<div class="flex gap-2">
 			<div class="flex">
 				<button type="submit" class="btn-primary">Save</button>
@@ -300,6 +164,5 @@
 				>
 			</div>
 		</div>
-		<!-- {/if} -->
 	</form>
 </div>

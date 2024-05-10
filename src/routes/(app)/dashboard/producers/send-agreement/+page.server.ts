@@ -40,56 +40,5 @@ export const actions = {
 		};
 
 		await sendEmail();
-
-		// OLD
-		// const sendDocumentForSignature = async (accessToken: string, widgetId: string) => {
-		// 	console.log('accessToken', accessToken);
-		// 	console.log('widgetId', widgetId);
-		// 	console.log(producerEmail);
-		// 	const requestBody = {
-		// 		shareCreationInfo: [
-		// 			{
-		// 				email: producerEmail as string,
-		// 				message: `Please fill out and sign the ${producerName} Producers Agreement documents where indicated.`
-		// 			}
-		// 		]
-		// 	};
-
-		// 	// Make POST request to Adobe Sign API to send document for signature
-		// 	await fetch(`https://api.na4.adobesign.com/api/rest/v6/widgets/${widgetId}/members/share`, {
-		// 		method: 'POST',
-		// 		headers: {
-		// 			Authorization: `Bearer ${accessToken}`,
-		// 			'Content-Type': 'application/json'
-		// 		},
-		// 		body: JSON.stringify(requestBody)
-		// 	})
-		// 		.then((response) => {
-		// 			return response.json();
-		// 		})
-		// 		.then((data) => {
-		// 			console.log('data', data);
-		// 			return (data as { id: string })?.id;
-		// 		});
-
-		// 	// const json = (await response.json()) as { id?: string; code?: string };
-		// 	// console.log('json', json);
-
-		// 	// if (!json?.id) {
-		// 	// 	error(400, {
-		// 	// 		message: 'Something went wrong sending the agreement for signature'
-		// 	// 	});
-		// 	// }
-
-		// 	// console.log('Agreement sent successfully. Agreement ID:', json?.id);
-		// 	// return json?.id; // Return the agreement ID
-		// };
-
-		// try {
-		// 	sendDocumentForSignature(ADOBE_SIGN_ACCESS_TOKEN, ADOBE_SIGN_WEB_FORM);
-		// } catch (e) {
-		// 	console.error('Error sending agreement for signature:', e);
-		// 	throw e;
-		// }
 	}
 } satisfies Actions;

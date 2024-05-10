@@ -20,7 +20,6 @@ export const actions: Actions = {
 		const primaryContactEmail = formData.get('primaryContactEmail') as string;
 		const primaryContactTitle = formData.get('primaryContactTitle') as string;
 		const tsSalesRepId = formData.get('tsSalesRepId') as string;
-		// const upload = formData.get('upload') as File;
 
 		if (!primaryContactPhone.match(/^(\+|)(1|)\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/)) {
 			console.log('invalid phone number', primaryContactPhone);

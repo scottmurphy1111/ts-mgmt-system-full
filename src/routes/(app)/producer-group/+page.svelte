@@ -1,9 +1,5 @@
 <script lang="ts">
-	import type { PageData } from '../$types';
-
-	export let data: any;
-
-	// $: console.log('data', data);
+	export let data;
 
 	$: ({ producer } = data);
 </script>

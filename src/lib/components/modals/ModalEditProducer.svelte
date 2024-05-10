@@ -5,10 +5,8 @@
 	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
 	import { applyAction, enhance } from '$app/forms';
 	import { states_and_provinces } from '$lib/helpers/states_and_provinces';
-	import type { ProducerWithIncludes } from '$lib/types/types';
 	import PhoneInput from '$lib/components/core/PhoneInput.svelte';
 	import EmailInput from '$lib/components/core/EmailInput.svelte';
-	import type { ActionResult } from '@sveltejs/kit';
 	import { writable, type Writable } from 'svelte/store';
 	import CloseIcon from '$lib/assets/icons/close.svelte';
 
@@ -16,55 +14,13 @@
 	/** Exposes parent props to this component. */
 	export let parent: SvelteComponent;
 
-	$: console.log('parent', parent);
-
 	const modalStore = getModalStore();
 	const toastStore = getToastStore();
 
-	$: console.log('$modalStore[0]', $modalStore[0]);
 	const pendingStore = getContext<Writable<Boolean>>('pendingStore');
 	const editingProducerStore = writable(false);
 
-	const getSalesRepId = () => {
-		return $modalStore[0]?.meta.userData?.publicMetadata?.ts_role === 'ts_rep'
-			? `?salesRepId=${$modalStore[0]?.meta.userData?.id}`
-			: '';
-	};
-
-	const getProducers = async () => {
-		return await fetch(`/api/producersAll${getSalesRepId()}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-			.then(async (res) => await res.json())
-			.then((data) => {
-				console.log('data', data);
-				return data as ProducerWithIncludes[];
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-	};
-
-	$: console.log('modalStore', $modalStore);
-
 	$: error = {} as { type: 'failure'; status: number; data?: Record<string, unknown> | undefined };
-
-	$: console.log('error', error);
-
-	// const sendToAgreements = () => {
-	// 	console.log('sendToAgreements');
-	// 	goto('/dashboard/producers/send-agreement');
-	// 	parent.onClose();
-	// };
-
-	// const sendToNew = () => {
-	// 	console.log('sendToNew');
-	// 	goto('/dashboard/producers/new');
-	// 	parent.onClose();
-	// };
 
 	// Notes: Use `w-screen h-screen` to fit the visible canvas size.
 	const cBase =
@@ -78,13 +34,11 @@
 		</button>
 		<div class="flex flex-col space-y-8 container">
 			<h3 class="h3 font-semibold mb-4">Edit Producer</h3>
-			<!-- {@html $modalStore[0].body} -->
 			<form
 				method="post"
 				action="?/updateProducer"
 				use:enhance={({}) => {
 					pendingStore.set(true);
-					console.log('🔥🔥🔥');
 					return async ({ update, result }) => {
 						if (result?.status === 200) {
 							await update();
@@ -104,29 +58,6 @@
 				}}
 			>
 				<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200 relative">
-					<!-- {#if $createdProducerContext?.id}
-				<input hidden type="text" name="producerId" bind:value={$createdProducerContext.id} />
-
-				{#if !$editingProducerStore}
-					<button
-						type="button"
-						class="btn-primary absolute -top-16 right-0"
-						on:click={editingProducer}
-					>
-						Edit
-					</button>
-				{/if}
-
-				{#if $editingProducerStore}
-					<button
-						type="submit"
-						class="btn-primary absolute -top-16 right-0"
-						on:click={editingProducer}
-					>
-						Save
-					</button>
-				{/if}
-			{/if} -->
 					<input hidden type="text" name="id" value={$modalStore[0]?.meta.producer.id} />
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="name">Producer Name*</label>
@@ -138,8 +69,6 @@
 							value={$modalStore[0]?.meta.producer.name}
 							required
 						/>
-						<!-- value={$createdProducerContext?.name}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="dba">Dba</label>
@@ -150,8 +79,6 @@
 							name="dba"
 							value={$modalStore[0]?.meta.producer.dba}
 						/>
-						<!-- value={$createdProducerContext?.dba}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="taxId">Tax Id</label>
@@ -162,8 +89,6 @@
 							name="taxId"
 							value={$modalStore[0]?.meta.producer.taxId}
 						/>
-						<!-- value={$createdProducerContext?.taxId}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="website">Website</label>
@@ -174,8 +99,6 @@
 							name="website"
 							value={$modalStore[0]?.meta.producer.website}
 						/>
-						<!-- value={$createdProducerContext?.website}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 					</span>
 				</div>
 				<div class="flex flex-col gap-4 mb-8 pb-8 border-b border-surface-200">
@@ -241,8 +164,6 @@
 							value={$modalStore[0]?.meta.producer.primaryContactName}
 							required
 						/>
-						<!-- value={$createdProducerContext?.primaryContactName}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
 						<PhoneInput
@@ -251,57 +172,14 @@
 							value={$modalStore[0]?.meta.producer.primaryContactPhone}
 							error={Boolean(error.data?.invalidPhone)}
 						/>
-						/>
-						<!-- <input
-					class="input"
-					type="tel"
-					id="primaryContactPhone"
-					name="primaryContactPhone"
-					pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-					required
-				/> -->
-						<!-- <MaskInput
-					alwaysShowMask
-					maskChar="_"
-					mask="000-000-0000"
-					class="input"
-					type="text"
-					id="primaryContactPhone"
-					name="primaryContactPhone"
-					required
-				/> -->
-						<!-- <MaskInput
-					mask="(000) 000 - 0000"
-					size={20}
-					showMask
-					alwaysShowMask
-					maskChar="_"
-					class="input"
-					type="text"
-					id="primaryContactPhone"
-					name="primaryContactPhone"
-					required
-				/> -->
-						<!-- value={$createdProducerContext?.primaryContactPhone}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
-						<!-- <label class="font-semibold" for="primaryContactEmail">Email*</label> -->
 						<EmailInput
 							name="primaryContactEmail"
 							required={true}
 							error={Boolean(error.data?.invalidEmail)}
 							value={$modalStore[0]?.meta.producer.primaryContactEmail}
 						/>
-						<!-- <input
-					class="input"
-					type="email"
-					id="primaryContactEmail"
-					name="primaryContactEmail"
-					required
-				/> -->
-						<!-- value={$createdProducerContext?.primaryContactEmail}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 					</span>
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="primaryContactTitle">Title</label>
@@ -312,8 +190,6 @@
 							name="primaryContactTitle"
 							value={$modalStore[0]?.meta.producer.primaryContactTitle}
 						/>
-						<!-- value={$createdProducerContext?.primaryContactTitle}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 					</span>
 				</div>
 				<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
@@ -326,8 +202,6 @@
 							value={$modalStore[0]?.meta.producer.type}
 							required
 						>
-							<!-- value={$createdProducerContext?.type}
-					disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 							<option value="dealership">DEALERSHIP</option>
 							<option value="lender">LENDER</option>
 							<option value="fleet">FLEET</option>
@@ -345,8 +219,6 @@
 								value={$modalStore[0]?.meta.producer.tsSalesRepId}
 								required
 							>
-								<!-- value={$createdProducerContext?.tsSalesRepId}
-						disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 								<option value={$modalStore[0]?.meta.userData.id}
 									>{$modalStore[0]?.meta.userData?.firstName}
 									{$modalStore[0]?.meta.userData.lastName}</option
@@ -364,8 +236,6 @@
 								value={$modalStore[0]?.meta.producer.tsSalesRepId}
 								required
 							>
-								<!-- value={$createdProducerContext?.tsSalesRepId}
-						disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 								<option disabled selected value={null}>Select a Sales Rep</option>
 								{#each $modalStore[0]?.meta.reps as rep}
 									<option value={rep.publicUserData?.userId}
@@ -376,26 +246,6 @@
 						</span>
 					{/if}
 				</div>
-				<!-- {#if !$createdProducerContext?.id}
-		<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
-			<span class="flex flex-col items-baseline gap-1">
-				<label class="flex gap-1 font-semibold" for="upload"
-					>Upload Signed Producer Agreement <button
-						type="button"
-						class="flex"
-						on:click={openInstructions}
-					>
-						<span class="flex w-4 h-4 mr-2">
-							<svelte:component this={InfoCircleIcon} />
-						</span>
-					</button>
-				</label>
-				<input type="file" id="upload" name="upload" accept="application/pdf" /> -->
-				<!--  // ADD BAck Required ❗️❗️❗️❗️ ☝️ -->
-				<!-- </span>
-		</div>
-	{/if} -->
-				<!-- {#if !$createdProducerContext?.id} -->
 				<div class="flex gap-2">
 					<div class="flex">
 						<button type="submit" class="btn-primary">Save</button>
@@ -404,7 +254,6 @@
 						<button type="button" class="btn-error" on:click={parent.onClose}>Cancel</button>
 					</div>
 				</div>
-				<!-- {/if} -->
 			</form>
 		</div>
 	</div>

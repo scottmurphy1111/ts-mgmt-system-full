@@ -37,7 +37,7 @@
 			})
 				.then(async (res) => {
 					if (res.ok) {
-						invalidateAll(); //fix?
+						invalidateAll();
 						toastStore.trigger({ message: '👍 Output deleted successfully' });
 						pendingStore.set(false);
 					}

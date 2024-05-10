@@ -3,11 +3,8 @@
 
 	// Stores
 	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-	import { applyAction, enhance } from '$app/forms';
-	import type { ProducerWithIncludes } from '$lib/types/types';
+	import { enhance } from '$app/forms';
 	import CloseIcon from '$lib/assets/icons/close.svelte';
-	import PhoneInput from '$lib/components/core/PhoneInput.svelte';
-	import EmailInput from '$lib/components/core/EmailInput.svelte';
 
 	// Props
 	/** Exposes parent props to this component. */
@@ -16,51 +13,6 @@
 	const modalStore = getModalStore();
 	const toastStore = getToastStore();
 
-	$: console.log('modalStore', $modalStore);
-
-	$: error = {} as { type: 'failure'; status: number; data?: Record<string, unknown> | undefined };
-
-	$: console.log('error', error);
-	const getSalesRepId = () => {
-		return $modalStore[0]?.meta.userData?.publicMetadata?.ts_role === 'ts_rep'
-			? `?salesRepId=${$modalStore[0]?.meta.userData?.id}`
-			: '';
-	};
-
-	const getProducers = async () => {
-		return await fetch(`/api/producersAll${getSalesRepId()}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				console.log('data', data);
-				return data as ProducerWithIncludes[];
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-	};
-
-	$: producers = getProducers();
-
-	console.log('modalStore', $modalStore);
-
-	// const sendToAgreements = () => {
-	// 	console.log('sendToAgreements');
-	// 	goto('/dashboard/producers/send-agreement');
-	// 	parent.onClose();
-	// };
-
-	// const sendToNew = () => {
-	// 	console.log('sendToNew');
-	// 	goto('/dashboard/producers/new');
-	// 	parent.onClose();
-	// };
-
-	// Notes: Use `w-screen h-screen` to fit the visible canvas size.
 	const cBase =
 		'bg-surface-100-800-token w-auto h-full p-16 flex justify-center items-center rounded-lg relative';
 </script>
@@ -80,7 +32,6 @@
 					action="?/completeEnrollment"
 					use:enhance={() => {
 						return async ({ result, update }) => {
-							console.log('🥶', result);
 							await update();
 							if (result?.status === 204) {
 								toastStore.trigger({ message: '👍 Enrollment sent successfully' });

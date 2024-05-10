@@ -3,8 +3,6 @@
 	import { Toast, Modal, initializeStores, type ModalComponent } from '@skeletonlabs/skeleton';
 	import ModalImage from '$lib/components/ModalImage.svelte';
 	import ModalProducersSigning from '$lib/components/modals/ModalProducersSigning.svelte';
-	import AssignProgramsModal from '$lib/components/AssignProgramsModal.svelte';
-	import CreateLocationUsersModal from '$lib/components/CreateLocationUsersModal.svelte';
 
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
@@ -22,11 +20,7 @@
 		modalAddContact: { ref: ModalAddContact },
 		modalAddPrograms: { ref: ModalAddPrograms },
 		modalCompleteEnrollment: { ref: ModalCompleteEnrollment },
-		modalEditProducer: { ref: ModalEditProducer },
-
-		//remove??
-		assignProgramsModal: { ref: AssignProgramsModal },
-		createLocationUsersModal: { ref: CreateLocationUsersModal }
+		modalEditProducer: { ref: ModalEditProducer }
 	};
 
 	const pendingStore = writable<boolean>(false);

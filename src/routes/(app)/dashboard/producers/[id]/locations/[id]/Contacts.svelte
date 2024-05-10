@@ -14,7 +14,6 @@
 	import type { Writable } from 'svelte/store';
 
 	export let location: LocationWithIncludes;
-	export let error: string | undefined;
 
 	let contacts: LocationContact[] = [];
 	$: if (location.locationContacts) {
@@ -35,7 +34,6 @@
 				locationId: location?.id
 			},
 			response: (response) => {
-				console.log('response', response);
 				if (!response) {
 					handler.invalidate();
 				}
@@ -56,7 +54,6 @@
 				contact
 			},
 			response: (response) => {
-				console.log('response', response);
 				if (!response) {
 					handler.invalidate();
 				}
@@ -111,7 +108,6 @@
 	$: if (contacts) {
 		handler.invalidate();
 	}
-	// handler.invalidate();
 </script>
 
 <Datatable {handler} rowsPerPage={false} pagination={false} search={false}>
@@ -125,10 +121,6 @@
 				<ThSort orderBy="role" {handler}>Role</ThSort>
 				<th>Actions</th>
 			</tr>
-			<!-- <tr>
-        <ThFilter {handler} filterBy="name" />
-        <ThFilter {handler} filterBy="createdAt" />
-      </tr> -->
 		</thead>
 		<tbody>
 			{#await $rows}
@@ -179,7 +171,6 @@
 				{/if}
 			{/await}
 		</tbody>
-		<!-- {/if} -->
 	</table>
 </Datatable>
 <button type="button" on:click={addContact} class="btn-primary w-min">+ Add Contact</button>

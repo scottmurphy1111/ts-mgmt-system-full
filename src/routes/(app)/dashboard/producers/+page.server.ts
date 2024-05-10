@@ -2,14 +2,13 @@ import { type Actions } from '@sveltejs/kit';
 import { client } from '$lib/server/prisma';
 import { saveProducer } from '$lib/functions/saveProducer';
 import type { ProducerWithIncludes } from '$lib/types/types';
-import type { PageServerLoad } from '../$types';
-// import { transporter } from '$lib/server/nodemailer.server';
 import { getRepName } from '$lib/functions/getRepName';
 import { getUserName } from '$lib/functions/getUserName';
 import clerkClient from '@clerk/clerk-sdk-node';
 import { format } from 'date-fns';
 import { SENDGRID_API_KEY } from '$env/static/private';
 import sgMail from '@sendgrid/mail';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ url, depends }) => {
 	depends('data:producer');
@@ -58,8 +57,6 @@ export const load: PageServerLoad = async ({ url, depends }) => {
 		}
 	});
 
-	console.log('🥶 producers', producers);
-
 	return {
 		count,
 		producers: producers as ProducerWithIncludes[]
@@ -75,12 +72,8 @@ export const actions: Actions = {
 	saveLocation: async ({ request }) => {
 		const formData = await request.formData();
 
-		console.log('formData', formData);
-
 		const locationId = formData.get('locationId');
-		console.log('locationId', locationId);
 		const producerId = formData.get('producerId');
-		console.log('producerId', producerId);
 		const name = formData.get('name');
 		const phone = formData.get('phone');
 		const email = formData.get('email');
@@ -138,21 +131,6 @@ export const actions: Actions = {
 				tsSalesRepId: tsSalesRepId as string,
 				producerId: producerId as string,
 				main: main === 'true'
-				// programs: {
-				// 	create: formattedProducerPrograms.map((program) => {
-				// 		return {
-				// 			name: program[Object.keys(program)[0]].name,
-				// 			markups: {
-				// 				create: program[Object.keys(program)[0]].markups.map((markup) => {
-				// 					return {
-				// 						termValue: markup.termValue,
-				// 						markupValue: markup.markupValue
-				// 					};
-				// 				})
-				// 			}
-				// 		};
-				// 	})
-				// }
 			}
 		});
 
@@ -170,10 +148,7 @@ export const actions: Actions = {
 	saveContact: async ({ request }) => {
 		const formData = await request.formData();
 
-		console.log('formData', formData);
-
 		const locationId = formData.get('locationId');
-		console.log('locationId', locationId);
 		const id = formData.get('id');
 		const firstName = formData.get('firstName');
 		const lastName = formData.get('lastName');
@@ -221,15 +196,9 @@ export const actions: Actions = {
 	createPrograms: async ({ request }) => {
 		const formData = await request.formData();
 
-		// console.log('formData', formData);
-
 		const producerId = formData.get('producerId');
-		console.log('producerId', producerId);
 		const locationId = formData.get('locationId');
-		console.log('locationId', locationId);
-		// const producerProgramIds = formData.getAll('producerProgramId');
 		const producerProgramNames = formData.getAll('producerProgramName');
-		// const producerProgramMarkupIds = formData.getAll('producerProgramMarkupId');
 		const producerProgramMarkupTermValues12 = formData.getAll('producerProgramMarkupTermValue12');
 		const producerProgramMarkupMarkupValues12 = formData.getAll(
 			'producerProgramMarkupMarkupValue12'
@@ -275,12 +244,8 @@ export const actions: Actions = {
 			};
 		});
 
-		console.log('formattedMarkups12', formattedMarkups12);
-
 		const formattedProducerPrograms = producerProgramNames.reduce(
 			(acc, id, i) => {
-				console.log('id', id);
-				console.log('i', i);
 				const newItem = {
 					[id as string]: {
 						name: producerProgramNames[i] as string,
@@ -310,13 +275,9 @@ export const actions: Actions = {
 			}[]
 		);
 
-		console.log('formattedProducerPrograms', JSON.stringify(formattedProducerPrograms, null, 2));
-
 		for (const program of formattedProducerPrograms) {
 			const programId = Object.keys(program)[0];
-			console.log('programId', programId);
 			const programName = program[programId].name;
-			console.log('programName', programName);
 
 			await client.locationProgram.create({
 				data: {
@@ -347,87 +308,9 @@ export const actions: Actions = {
 			}
 		});
 
-		// formattedProducerPrograms.map((program) => {
-		// 	console.log('program', program);
-		// 	// console.log('locationId', locationId[0] as string);
-		// });
-
 		return {
 			producer
 		};
-
-		//   await client.producerProgram.upsert({
-		//     where: {
-		//       id: program as string
-		//     },
-		//     update: {
-		//       name: program.name as string,
-		//       markups: {
-		//         update: program.markups.map((markup) => {
-		//           return {
-		//             where: {
-		//               id: markup.id
-		//             },
-		//             data: {
-		//               termValue: markup.termValue,
-		//               markupValue: markup.markupValue
-		//             }
-		//           };
-		//         })
-		//       }
-		//     }
-
-		// programs: {
-		//   update: formattedProducerPrograms.map((program) => {
-		//     return {
-		//       where: {
-		//         id: Object.keys(program)[0]
-		//       },
-		//       data: {
-		//         name: program[Object.keys(program)[0]].name,
-		//         markups: {
-		//           update: program[Object.keys(program)[0]].markups.map((markup) => {
-		//             return {
-		//               where: {
-		//                 id: markup.id
-		//               },
-		//               data: {
-		//                 termValue: markup.termValue,
-		//                 markupValue: markup.markupValue
-		//               }
-		//             };
-		//           })
-		//         }
-		//       }
-		//     };
-		//   })
-		// }
-		// const name = formData.get('name') as string;
-
-		// const formData = await request.formData();
-
-		// Upload PA to S3
-		// const name = formData.get('name') as string;
-		// const upload = formData.get('upload') as File;
-		// console.log('🥶', JSON.stringify(upload, null, 2));
-
-		// const params = {
-		// 	Bucket: BUCKET, // The path to the directory you want to upload the object to, starting with your Space name.
-		// 	Key: `producer-agreements/${name}.pdf`, // Object key, referenced whenever you want to access this file later.
-		// 	Body: Buffer.from(await upload.arrayBuffer()), // The object's contents. This variable is an object, not a string.
-		// 	ACL: 'private' as ObjectCannedACL // Defines ACL permissions, such as private or public.
-		// };
-		// const uploadObject = async () => {
-		// 	try {
-		// 		const data = await s3Client.send(new PutObjectCommand(params));
-		// 		console.log('Successfully uploaded object: ' + params.Bucket + '/' + params.Key);
-		// 		return data;
-		// 	} catch (err) {
-		// 		console.log('Error', err);
-		// 	}
-		// };
-
-		// uploadObject();
 	},
 	completeEnrollment: async ({ request, locals }) => {
 		const tsSalesRepId = locals.session?.userId as string;
@@ -466,7 +349,6 @@ export const actions: Actions = {
 		const sendEmail = async () => {
 			const mailOptions = {
 				to: ['scott.murphy@trucksuite.com', 'debbi@trucksuite.com'],
-				// from: GOOGLE_APP_TRUCKSUITE_SYSTEM_USER,
 				from: 'support@trucksuite.com',
 				subject: `New Producer Enrollment Submission from ${producer?.name} - submitted by ${getUserName(tsSalesRepId, users)}`,
 				text: 'New Producer Enrollment Submission',

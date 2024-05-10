@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getContext, type SvelteComponent } from 'svelte';
+	import { type SvelteComponent } from 'svelte';
 
 	// Stores
 	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
@@ -8,15 +8,10 @@
 	import type { ProducerWithIncludes } from '$lib/types/types';
 	import PhoneInput from '$lib/components/core/PhoneInput.svelte';
 	import EmailInput from '$lib/components/core/EmailInput.svelte';
-	import type { ActionResult } from '@sveltejs/kit';
-	import type { Writable } from 'svelte/store';
 	import CloseIcon from '$lib/assets/icons/close.svelte';
 
 	// Props
-	/** Exposes parent props to this component. */
 	export let parent: SvelteComponent;
-
-	$: console.log('parent', parent);
 
 	const modalStore = getModalStore();
 	const toastStore = getToastStore();
@@ -48,19 +43,6 @@
 
 	$: error = {} as { type: 'failure'; status: number; data?: Record<string, unknown> | undefined };
 
-	// const sendToAgreements = () => {
-	// 	console.log('sendToAgreements');
-	// 	goto('/dashboard/producers/send-agreement');
-	// 	parent.onClose();
-	// };
-
-	// const sendToNew = () => {
-	// 	console.log('sendToNew');
-	// 	goto('/dashboard/producers/new');
-	// 	parent.onClose();
-	// };
-
-	// Notes: Use `w-screen h-screen` to fit the visible canvas size.
 	const cBase =
 		'bg-surface-100-800-token w-auto h-full p-16 flex justify-center items-center rounded-lg relative';
 </script>
@@ -72,7 +54,6 @@
 		</button>
 		<div class="flex flex-col space-y-8 container">
 			<h3 class="h3 font-semibold mb-4">Add/Edit Location</h3>
-			<!-- {@html $modalStore[0].body} -->
 			<form
 				method="post"
 				action="?/saveLocation"
@@ -87,12 +68,7 @@
 							if (result.type === 'failure') {
 								error = { ...result };
 							}
-
-							// toastStore.trigger({ message: '❗️ Location save failed' });
 						}
-						// parent.onClose();
-						// editingProducerStore.set(false);
-						// creatingLocationStore.set(false);
 					};
 				}}
 			>
@@ -127,6 +103,7 @@
 								<option disabled selected>Select Producer</option>
 								{#await producers}
 									<!-- Show loading state -->
+									<option>Loading...</option>
 								{:then producers}
 									{#if producers}
 										{#each producers as producer}
@@ -143,7 +120,6 @@
 					{#if $modalStore[0]?.meta.userData?.publicMetadata?.ts_role === 'ts_rep'}
 						<span class="flex flex-col items-baseline gap-1">
 							<label class="font-semibold" for="tsSalesRepId">TruckSuite Sales Rep*</label>
-							<!-- disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 							<select
 								class="select"
 								id="tsSalesRepId"
@@ -161,7 +137,6 @@
 					{#if $modalStore[0]?.meta.userData?.publicMetadata?.ts_role === 'admin'}
 						<span class="flex flex-col items-baseline gap-1">
 							<label class="font-semibold" for="tsSalesRepId">TruckSuite Sales Rep*</label>
-							<!-- disabled={!!$createdProducerContext?.id && !$editingProducerStore} -->
 							<select
 								class="select"
 								id="tsSalesRepId"
@@ -179,8 +154,6 @@
 						</span>
 					{/if}
 				</div>
-				<!-- <input hidden type="text" name="producerId" value={$modalStore[0]?.meta.producerId} /> -->
-				<!-- <input hidden type="text" name="locationId" value={location.id} /> -->
 				<div class="grid grid-cols-2 gap-4 mb-8 pb-8 border-b border-surface-200">
 					<span class="flex flex-col items-baseline gap-1">
 						<label class="font-semibold" for="name">Location Name*</label>
@@ -283,7 +256,7 @@
 								type="checkbox"
 								id="main"
 								name="main"
-								value={$modalStore[0].meta.location?.main ?? false}
+								checked={$modalStore[0]?.meta.location?.main ? true : false}
 							/>
 						</span>
 					</div>
@@ -350,9 +323,7 @@
 				</div>
 				<div class="grid grid-cols-2 gap-4">
 					<span class="flex flex-col items-baseline gap-1">
-						<!-- {#if $creatingLocationStore} -->
 						<button type="submit" class="btn-primary w-min">Save Location</button>
-						<!-- {/if} -->
 					</span>
 				</div>
 			</form>

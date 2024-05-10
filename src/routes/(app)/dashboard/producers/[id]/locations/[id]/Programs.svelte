@@ -7,14 +7,13 @@
 		LocationWithIncludes,
 		Ratesheet
 	} from '$lib/types/types';
-	import type { LocationContact, LocationMarkup, LocationProgram } from '@prisma/client';
 	import { getModalStore, getToastStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import { DataHandler, type State } from '@vincjo/datatables/remote';
 	import MarkupsRow from './MarkupsRow.svelte';
 	import DeleteIcon from '$lib/assets/icons/delete.svelte';
 	import { invalidate, invalidateAll } from '$app/navigation';
-	import { getContext, setContext } from 'svelte';
-	import { writable, type Writable } from 'svelte/store';
+	import { getContext } from 'svelte';
+	import { type Writable } from 'svelte/store';
 
 	export let location: LocationWithIncludes;
 	export let ratesheets: Ratesheet[];
@@ -42,7 +41,6 @@
 				assignedPrograms: programs
 			},
 			response: (response) => {
-				console.log('response', response);
 				if (!response) {
 					handler.invalidate();
 					invalidate('data:location');
@@ -110,13 +108,8 @@
 			<tr>
 				<ThSort orderBy="name" {handler}>Name</ThSort>
 				<th>Markups</th>
-
 				<th>Actions</th>
 			</tr>
-			<!-- <tr>
-        <ThFilter {handler} filterBy="name" />
-        <ThFilter {handler} filterBy="createdAt" />
-      </tr> -->
 		</thead>
 		<tbody>
 			{#await $rows}
@@ -137,12 +130,6 @@
 							<td>
 								<MarkupsRow {program} />
 							</td>
-							<!-- <td>
-								<span class="flex items-center">{contact.phone}</span>
-							</td>
-							<td>
-								<span class="flex items-center">{contact.role}</span>
-							</td> -->
 							<td class="flex gap-4 items-center">
 								<button
 									class="btn-icon text-error-500 w-6 h-6"
@@ -150,21 +137,12 @@
 								>
 									<svelte:component this={DeleteIcon} />
 								</button>
-								<!-- <a
-									class="flex text-primary-500 items-center"
-									href={`/dashboard/producers/${producer.id}/locations/${location.id}`}>View</a
-								>
-								<a
-									class="flex text-primary-500 items-center"
-									href={`/dashboard/producer-enrollment/${location.id}`}>Complete</a
-								> -->
 							</td>
 						</tr>
 					{/each}
 				{/if}
 			{/await}
 		</tbody>
-		<!-- {/if} -->
 	</table>
 </Datatable>
 {#if error}

@@ -13,7 +13,6 @@ export const load: PageServerLoad = async ({ params }) => {
 		}
 	});
 
-	// console.log('producer', producer);
 	return {
 		producer: producer as ProducerWithIncludes
 	};
@@ -23,12 +22,8 @@ export const actions: Actions = {
 	saveLocation: async ({ request }) => {
 		const formData = await request.formData();
 
-		console.log('formData', formData);
-
 		const locationId = formData.get('locationId') as string;
-		console.log('locationId', locationId);
 		const producerId = formData.get('producerId') as string;
-		console.log('producerId', producerId);
 		const name = formData.get('name') as string;
 		const phone = formData.get('phone') as string;
 		const email = formData.get('email') as string;
@@ -44,12 +39,9 @@ export const actions: Actions = {
 		const mailingZip = formData.get('mailingZip') as string;
 		const mailingCountry = formData.get('mailingCountry') as string;
 		const tsSalesRepId = formData.get('tsSalesRepId') as string;
-		console.log('tsSalesRepId', tsSalesRepId);
 		const main = formData.get('main');
-		console.log('main', main);
 
 		if (!phone.match(/^(\+|)(1|)\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/)) {
-			console.log('invalid phone number', phone);
 			return fail(400, {
 				phone,
 				invalidPhone: true
@@ -57,7 +49,6 @@ export const actions: Actions = {
 		}
 
 		if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
-			console.log('invalid email', email);
 			return fail(400, {
 				email,
 				invalidEmail: true
@@ -86,21 +77,6 @@ export const actions: Actions = {
 						tsSalesRepId: tsSalesRepId as string,
 						producerId: producerId as string,
 						main: main === 'on' ? true : false
-						// programs: {
-						// 	create: formattedProducerPrograms.map((program) => {
-						// 		return {
-						// 			name: program[Object.keys(program)[0]].name,
-						// 			markups: {
-						// 				create: program[Object.keys(program)[0]].markups.map((markup) => {
-						// 					return {
-						// 						termValue: markup.termValue,
-						// 						markupValue: markup.markupValue
-						// 					};
-						// 				})
-						// 			}
-						// 		};
-						// 	})
-						// }
 					}
 				});
 			} else {
@@ -126,21 +102,6 @@ export const actions: Actions = {
 						tsSalesRepId: tsSalesRepId as string,
 						producerId: producerId as string,
 						main: main === 'on' ? true : false
-						// programs: {
-						// 	create: formattedProducerPrograms.map((program) => {
-						// 		return {
-						// 			name: program[Object.keys(program)[0]].name,
-						// 			markups: {
-						// 				create: program[Object.keys(program)[0]].markups.map((markup) => {
-						// 					return {
-						// 						termValue: markup.termValue,
-						// 						markupValue: markup.markupValue
-						// 					};
-						// 				})
-						// 			}
-						// 		};
-						// 	})
-						// }
 					}
 				});
 			}
@@ -159,63 +120,9 @@ export const actions: Actions = {
 				saveLocationError: `Error Saving Location, Please try again! ${e}`
 			});
 		}
-
-		// saveContact: async ({ request }) => {
-		// 	const formData = await request.formData();
-
-		// 	console.log('formData', formData);
-
-		// 	const locationId = formData.get('locationId');
-		// 	console.log('locationId', locationId);
-		// 	const id = formData.get('id');
-		// 	const firstName = formData.get('firstName');
-		// 	const lastName = formData.get('lastName');
-		// 	const phone = formData.get('phone');
-		// 	const email = formData.get('email');
-		// 	const role = formData.get('role');
-
-		// 	let contact;
-
-		// 	if (!id) {
-		// 		contact = await client.locationContact.create({
-		// 			data: {
-		// 				firstName: firstName as string,
-		// 				lastName: lastName as string,
-		// 				phone: phone as string,
-		// 				email: email as string,
-		// 				role: role as string,
-		// 				locationId: locationId as string
-		// 			}
-		// 		});
-		// 	} else {
-		// 		contact = await client.locationContact.update({
-		// 			where: {
-		// 				id: id as string
-		// 			},
-		// 			data: {
-		// 				firstName: firstName as string,
-		// 				lastName: lastName as string,
-		// 				phone: phone as string,
-		// 				email: email as string,
-		// 				role: role as string,
-		// 				locationId: locationId as string
-		// 			}
-		// 		});
-		// 	}
-
-		// 	const location = await client.tsLocation.findUnique({
-		// 		where: {
-		// 			id: locationId as string
-		// 		}
-		// 	});
-
-		// 	return { contact, location };
-		// }
 	},
 	updateProducer: async ({ request, params }) => {
 		const formData = await request.formData();
-
-		console.log('🥶params.id', params.id);
 
 		const producerId = params.id as string;
 		const name = formData.get('name') as string;
@@ -233,10 +140,8 @@ export const actions: Actions = {
 		const primaryContactEmail = formData.get('primaryContactEmail') as string;
 		const primaryContactTitle = formData.get('primaryContactTitle') as string;
 		const tsSalesRepId = formData.get('tsSalesRepId') as string;
-		// const upload = formData.get('upload') as File;
 
 		if (!primaryContactPhone.match(/^(\+|)(1|)\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/)) {
-			console.log('invalid phone number', primaryContactPhone);
 			return fail(400, {
 				primaryContactPhone,
 				invalidPhone: true
@@ -244,7 +149,6 @@ export const actions: Actions = {
 		}
 
 		if (!primaryContactEmail.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
-			console.log('invalid email', primaryContactEmail);
 			return fail(400, {
 				primaryContactEmail,
 				invalidEmail: true
@@ -278,15 +182,10 @@ export const actions: Actions = {
 				}
 			});
 
-			// if (upload) {
-			// 	uploadProducerAgreement(name, upload);
-			// }
-
 			return {
 				producer
 			};
 		} catch (e) {
-			console.log('e', e);
 			return fail(422, {
 				saveProducerError: `🥶 Cannot Save Producer ${e}`
 			});

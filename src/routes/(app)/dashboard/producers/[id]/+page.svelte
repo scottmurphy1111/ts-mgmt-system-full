@@ -17,9 +17,6 @@
 
 	$: ({ producer, userData, reps } = data);
 
-	$: console.log('🙆‍♀️producer', producer);
-	$: console.log('form', form);
-
 	const modalStore = getModalStore();
 	const pendingStore = getContext<Writable<Boolean>>('pendingStore');
 
@@ -39,7 +36,6 @@
 				form
 			},
 			response: (response) => {
-				console.log('response', response);
 				pendingStore.set(true);
 				if (!response) {
 					handler.invalidate();
@@ -95,8 +91,6 @@
 	$: if (producer.locations) {
 		producerLocations = producer?.locations;
 	}
-
-	$: console.log('producerLocations', producerLocations);
 
 	const handler = new DataHandler<LocationWithIncludes>(producerLocations, {
 		rowsPerPage: 9999,
@@ -186,14 +180,6 @@
 		</div>
 		<h4 class="h4 font-semibold">Locations</h4>
 		<div class="flex flex-col gap-8 w-full pb-8 border-b border-surface-200">
-			<!-- <div class="flex flex-col gap-2">
-				{#each producer.locations as location}
-					<div class="flex flex-col gap-2">
-						<span class="font-semibold text-base">Name</span>
-						<p>{location.name}</p>
-					</div>
-				{/each}
-			</div> -->
 			<Datatable {handler} rowsPerPage={false} pagination={false}>
 				<table class="table mb-4">
 					<thead>
@@ -203,10 +189,6 @@
 							<ThSort orderBy="createdAt" {handler}>Date Created</ThSort>
 							<th>Actions</th>
 						</tr>
-						<!-- <tr>
-              <ThFilter {handler} filterBy="name" />
-              <ThFilter {handler} filterBy="createdAt" />
-            </tr> -->
 					</thead>
 					<tbody>
 						{#await $rows}
@@ -246,7 +228,6 @@
 							{/if}
 						{/await}
 					</tbody>
-					<!-- {/if} -->
 				</table>
 			</Datatable>
 			<button type="button" on:click={addLocation} class="btn-primary w-min">+ Add Location</button>

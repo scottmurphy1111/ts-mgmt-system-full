@@ -17,8 +17,6 @@
 	};
 
 	$: sortedMarkups = sortMarkups(program.locationMarkups);
-
-	$: console.log('sortedMarkups', sortedMarkups);
 </script>
 
 <div class="grid grid-cols-2 items-start w-full">

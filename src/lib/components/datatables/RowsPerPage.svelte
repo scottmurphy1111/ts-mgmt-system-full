@@ -2,7 +2,6 @@
 	import type { DataHandler } from '@vincjo/datatables/remote';
 	export let handler: DataHandler;
 	const rowsPerPage = handler.getRowsPerPage();
-	$: console.log('rowsPerPage', $rowsPerPage);
 	const options = [5, 10, 20, 50, 100];
 	const setRowsPerPage = () => {
 		handler.setPage(1);

@@ -30,7 +30,6 @@
 				form
 			},
 			response: (response) => {
-				console.log('response', response);
 				pendingStore.set(true);
 				if (!response) {
 					pendingStore.set(false);
@@ -100,7 +99,7 @@
 		</div>
 		<h4 class="h4 font-semibold">Contacts</h4>
 		<div class="flex flex-col gap-4 w-full pb-8 border-b border-surface-200">
-			<Contacts {location} error={form?.saveContactError} />
+			<Contacts {location} />
 		</div>
 		<h4 class="h4 font-semibold">Programs</h4>
 		<div class="flex flex-col gap-4 w-full pb-8 border-b border-surface-200">
