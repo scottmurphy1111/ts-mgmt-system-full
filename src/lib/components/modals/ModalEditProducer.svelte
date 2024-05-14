@@ -203,8 +203,11 @@
 							required
 						>
 							<option value="dealership">DEALERSHIP</option>
+							<option value="repair shop">REPAIR SHOP</option>
 							<option value="lender">LENDER</option>
 							<option value="fleet">FLEET</option>
+							<option value="association">ASSOCIATION</option>
+							<option value="travel center">TRAVEL CENTER</option>
 							<option value="other">OTHER</option>
 						</select>
 					</span>

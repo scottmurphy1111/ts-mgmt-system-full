@@ -99,7 +99,8 @@
 						<thead>
 							<tr>
 								<ThSort orderBy="name" {handler}>Name</ThSort>
-								<ThSort orderBy="primaryContactName" {handler}>Primary Contact</ThSort>
+								<ThSort orderBy="dba" {handler}>DBA</ThSort>
+								<ThSort orderBy="type" {handler}>Type</ThSort>
 								<th>Actions</th>
 							</tr>
 						</thead>
@@ -125,7 +126,12 @@
 											</td>
 											<td>
 												<a href={`/dashboard/producers/${producer.id}`}>
-													<span class="flex items-center">{producer.primaryContactName}</span>
+													<span class="flex items-center">{producer.dba}</span>
+												</a>
+											</td>
+											<td>
+												<a href={`/dashboard/producers/${producer.id}`}>
+													<span class="flex items-center">{producer.type.toUpperCase()}</span>
 												</a>
 											</td>
 											<td class="flex gap-4 items-center">
