@@ -348,7 +348,7 @@ export const actions: Actions = {
 
 		const sendEmail = async () => {
 			const mailOptions = {
-				to: ['scott.murphy@trucksuite.com', 'debbi@trucksuite.com'],
+				to: ['scott.murphy@trucksuite.com', 'debbi@trucksuite.com', 'alan@trucksuite.com'],
 				from: 'support@trucksuite.com',
 				subject: `New Producer Enrollment Submission from ${producer?.name} - submitted by ${getUserName(tsSalesRepId, users)}`,
 				text: 'New Producer Enrollment Submission',
