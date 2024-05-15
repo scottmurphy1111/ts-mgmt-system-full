@@ -107,8 +107,9 @@
 							value={$modalStore[0].meta.contact?.role ?? ''}
 							required
 						>
-							<option value={'ADMIN'}>Admin</option>
-							<option value={'SALES'}>Sales</option>
+							<option value={'LOCATION ADMIN'}>Location Admin</option>
+							<option value={'SALES MANAGER'}>Sales Manager</option>
+							<option value={'SALES INDIVIDUAL'}>Sales (Individual)</option>
 						</select>
 					</span>
 				</div>
