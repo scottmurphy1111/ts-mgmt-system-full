@@ -354,7 +354,7 @@ export const actions: Actions = {
 					'scott.murphy@trucksuite.com',
 					'debbi@trucksuite.com',
 					'alan@trucksuite.com',
-					repEmail
+					repEmail as string
 				],
 				from: 'support@trucksuite.com',
 				subject: `New Producer Enrollment Submission from ${producer?.name} - submitted by ${fullName}`,
