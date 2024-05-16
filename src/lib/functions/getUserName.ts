@@ -4,5 +4,10 @@ export const getUserName = (id: string, users: User[]) => {
 	const user = users?.find((user) => {
 		return user.id === id;
 	});
-	return `${user?.firstName} ${user?.lastName}`;
+	return {
+		fullName: `${user?.firstName} ${user?.lastName}`,
+		firstName: user?.firstName,
+		lastName: user?.lastName,
+		email: user?.emailAddresses[0].emailAddress
+	};
 };
