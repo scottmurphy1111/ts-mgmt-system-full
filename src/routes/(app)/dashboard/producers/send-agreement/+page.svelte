@@ -36,6 +36,11 @@
 						placeholder="Enter the Producer's Primary Contact Email"
 					/>
 				</span>
+				<input
+					type="hidden"
+					name="senderName"
+					value={`${userData?.firstName} ${userData?.lastName}`}
+				/>
 				{#if userData?.publicMetadata?.ts_role === 'ts_rep'}
 					<span class="flex flex-col items-baseline gap-1 w-full">
 						<label for="tsSalesRepId">TruckSuite Sales Rep*</label>

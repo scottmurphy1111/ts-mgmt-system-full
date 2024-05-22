@@ -10,6 +10,8 @@ export const actions = {
 		const producerName = formData.get('producerName') as string;
 		const producerEmail = formData.get('producerEmail') as string;
 		const tsSalesRepId = formData.get('tsSalesRepId') as string;
+		const senderName = formData.get('senderName') as string;
+
 		if (producerName === '' || producerEmail === '' || tsSalesRepId === '') {
 			return fail(400, {
 				message: 'Producer name, producer email, and sales rep lastname are required'
@@ -35,6 +37,14 @@ export const actions = {
 			const result = await sgMail.send(mailOptions);
 
 			if (result[0].statusCode === 202) {
+				await prisma.producerAgreementSentBy.create({
+					data: {
+						senderName: senderName,
+						producerName,
+						producerEmail
+					}
+				});
+
 				return redirect(302, '/dashboard/producers/send-agreement/success');
 			}
 		};

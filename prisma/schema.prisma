@@ -137,3 +137,12 @@ model Customer {
   zip       String
   country   String   @default("USA")
 }
+
+model ProducerAgreementSentBy {
+  id            String   @id @default(uuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  senderName    String
+  producerName  String
+  producerEmail String
+}
