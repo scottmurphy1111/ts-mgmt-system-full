@@ -14,11 +14,11 @@ export const actions = {
 
 		if (producerName === '' || producerEmail === '' || tsSalesRepId === '') {
 			return fail(400, {
-				message: 'Producer name, producer email, and sales rep lastname are required'
+				message: 'Producer Name, Producer Email, and Sales Rep selection are required'
 			});
 		}
 
-		const sendEmail = async () => {
+		const sendEmail = () => {
 			const mailOptions = {
 				to: producerEmail,
 				from: 'support@trucksuite.com',
@@ -34,21 +34,23 @@ export const actions = {
 			};
 
 			sgMail.setApiKey(SENDGRID_API_KEY);
-			const result = await sgMail.send(mailOptions);
-
-			if (result[0].statusCode === 202) {
-				await prisma.producerAgreementSentBy.create({
-					data: {
-						senderName: senderName,
-						producerName,
-						producerEmail
-					}
+			sgMail
+				.send(mailOptions)
+				.then(async () => {
+					await prisma.producerAgreementSentBy.create({
+						data: {
+							senderName: senderName,
+							producerName,
+							producerEmail
+						}
+					});
+				})
+				.catch((error) => {
+					return fail(500, {
+						message: JSON.stringify(error)
+					});
 				});
-
-				return redirect(302, '/dashboard/producers/send-agreement/success');
-			}
 		};
-
-		await sendEmail();
+		sendEmail();
 	}
 } satisfies Actions;

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	export let data;
 
 	$: ({ userData, reps } = data);
@@ -13,7 +14,16 @@
 			action="?/sendAgreement"
 			method="POST"
 			class="flex flex-col justify-center gap-4"
-			use:enhance
+			use:enhance={() => {
+				return async ({ result, update }) => {
+					if (result?.status === 204) {
+						await update();
+						goto('/dashboard/producers/send-agreement/success');
+					} else {
+						await applyAction(result);
+					}
+				};
+			}}
 		>
 			<div class="flex gap-4 w-full">
 				<span class="flex flex-col items-baseline gap-1 w-full">
