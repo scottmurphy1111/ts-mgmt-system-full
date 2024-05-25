@@ -1,4 +1,4 @@
-import { type Actions, fail, redirect } from '@sveltejs/kit';
+import { type Actions, fail } from '@sveltejs/kit';
 import { SENDGRID_API_KEY } from '$env/static/private';
 import sgMail from '@sendgrid/mail';
 import { selectProducerAgreement } from '$lib/helpers/selectProducerAgreement';
