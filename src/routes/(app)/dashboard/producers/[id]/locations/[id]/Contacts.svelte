@@ -12,6 +12,7 @@
 	import EditIcon from '$lib/assets/icons/edit.svelte';
 
 	import type { Writable } from 'svelte/store';
+	import { ContactRoles } from '$lib/helpers/displayObjects';
 
 	export let location: LocationWithIncludes;
 
@@ -148,7 +149,7 @@
 								<span class="flex items-center">{contact.title}</span>
 							</td>
 							<td>
-								<span class="flex items-center">{contact.role}</span>
+								<span class="flex items-center">{ContactRoles[contact.role]}</span>
 							</td>
 							<td class="flex gap-4 items-center">
 								<button

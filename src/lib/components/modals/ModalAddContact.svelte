@@ -8,6 +8,7 @@
 	import CloseIcon from '$lib/assets/icons/close.svelte';
 	import PhoneInput from '$lib/components/core/PhoneInput.svelte';
 	import EmailInput from '$lib/components/core/EmailInput.svelte';
+	import { ContactRoles } from '$lib/helpers/displayObjects';
 
 	// Props
 	export let parent: SvelteComponent;
@@ -107,9 +108,10 @@
 							value={$modalStore[0].meta.contact?.role ?? ''}
 							required
 						>
-							<option value={'LOCATION ADMIN'}>Location Admin</option>
-							<option value={'SALES MANAGER'}>Sales Manager</option>
-							<option value={'SALES INDIVIDUAL'}>Sales (Individual)</option>
+							<option value={'LOCATION_ADMIN'}>{ContactRoles.LOCATION_ADMIN}</option>
+							<option value={'SALES_MANAGER'}>{ContactRoles.SALES_MANAGER}</option>
+							<option value={'SALES_INDIVIDUAL'}>{ContactRoles.SALES_INDIVIDUAL}</option>
+							<option value={'OTHER'}>{ContactRoles.OTHER}</option>
 						</select>
 					</span>
 				</div>
