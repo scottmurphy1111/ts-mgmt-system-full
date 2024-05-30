@@ -12,6 +12,7 @@
 	import ModalAddContact from '$lib/components/modals/ModalAddContact.svelte';
 	import ModalAddPrograms from '$lib/components/modals/ModalAddPrograms.svelte';
 	import ModalCompleteEnrollment from '$lib/components/modals/ModalCompleteEnrollment.svelte';
+	import { navigating } from '$app/stores';
 
 	const modalRegistry: Record<string, ModalComponent> = {
 		modalImage: { ref: ModalImage },
@@ -27,6 +28,9 @@
 	setContext('pendingStore', pendingStore);
 
 	initializeStores();
+
+	$: if ($navigating) pendingStore.set(true);
+	$: if (!$navigating) pendingStore.set(false);
 </script>
 
 <Toast />
